@@ -87,7 +87,7 @@ def webhook():
         if 'jeny' in message.lower() and '#order' in message.lower():
             userID = payload['events'][0]['source']['userId']
             userProfile = GetUserProfile(userID,Channel_Access_Token)
-            orderTo,task,by = InsertTask(message,userProfile,userID)
+            orderTo,task,by = InsertTask(message,userProfile,userID,groupID)
             replyMessage = 'สั่งงานคุณ: {}\nรายละเอียดงาน: {}\nกำหนดส่ง: {}\nสั่งโดย: {}'.format(orderTo,task,by,userProfile)
             ReplyMessage(replyToken,replyMessage,Channel_Access_Token)
         if 'push' in message :
@@ -116,7 +116,7 @@ def FindTask(userProfile):
         reply.append(messageBack)
     return reply
 
-def InsertTask(message,userProfile,userID):
+def InsertTask(message,userProfile,userID,groupID):
     nameTag = ''
     tagCount = message.count('@')
     task = message.lower().split("#task ")[1].split("#")[0]
@@ -137,6 +137,7 @@ def InsertTask(message,userProfile,userID):
                 "done_at":"",
                 "order_by":userProfile,
                 "from_id":userID,
+                "group_id":groupID,
                 "status":"In Progress"}
 
         collection.insert_one(data)
