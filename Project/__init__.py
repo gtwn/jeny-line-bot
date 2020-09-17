@@ -124,6 +124,10 @@ def InsertTask(message,userProfile,userID,groupID):
         by = 'To night'
     else :
         by = message.lower().split("#by ")[1].split()[0]
+    by += '/2020'
+    ts =  int(datetime.strptime(by,"%d/%m/%Y").timestamp())
+    dt = (datetime.fromtimestamp(int(ts))).strftime('%Y-%m-%d %H:%M:%S')
+    dtObj =  datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
     for i in range (tagCount) :
         if i+1 == tagCount:
             tag = message.split('@')[i+1].split(' ')[0]
@@ -132,7 +136,7 @@ def InsertTask(message,userProfile,userID,groupID):
         nameTag += tag + ' '
         data = {"order_to":tag,
                 "task":task,
-                "deadline":by,
+                "deadline":dtObj,
                 "created_at":datetime.now(),
                 "done_at":"",
                 "order_by":userProfile,
