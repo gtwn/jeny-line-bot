@@ -138,7 +138,7 @@ def InsertTask(message,userProfile,userID,groupID):
                 "task":task,
                 "deadline":dtObj,
                 "created_at":datetime.now(),
-                "done_at":"",
+                "done_at":datetime.min,
                 "order_by":userProfile,
                 "from_id":userID,
                 "group_id":groupID,
