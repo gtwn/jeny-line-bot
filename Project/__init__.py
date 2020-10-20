@@ -5,19 +5,9 @@ import json
 from datetime import datetime
 from Project.Config import *
 
-import pymongo
-from pymongo import MongoClient
 from Project.Config import *
-
-
-uri = "mongodb+srv://{}:{}@cluster0-aarl2.mongodb.net/{}?retryWrites=true&w=majority".format(DB_Username,DB_Password,DB_Name)
-cluster = pymongo.MongoClient(uri)
-
-db = cluster["{}".format(DB_Name)]
-
-collection = db["task"]
-
-
+from Project.db.FindFunction import *
+from Project.db.InsertFunction import *
 
 
 app = Flask(__name__)
@@ -44,12 +34,6 @@ def webhook():
             
             replyMessage = 'Say Hi from ' + userID + 'in groupID' + groupID
             ReplyMessage(replyToken,replyMessage,Channel_Access_Token)
-        # if 'ข้อมูลกลุ่ม' in message :
-        #     replyMessage = 'ข้อมูลกลุ่ม : {}'.format(GetGroupSummary(groupID,Channel_Access_Token))
-        #     ReplyMessage(replyToken,replyMessage,Channel_Access_Token)
-        # if 'สมาชิกกลุ่ม' in message : 
-        #     replyMessage = 'สมาชิก ID : {}'.format(GetMemberUserIDs(groupID,Channel_Access_Token))
-        #     ReplyMessage(replyToken,replyMessage,Channel_Access_Token)
         if 'jeny' in message.lower() and '#order' in message.lower():
             profile = GetUserProfile(userID,Channel_Access_Token)
             orderTo,task,by = InsertTask(message,profile,userID,groupID)
@@ -74,70 +58,4 @@ def webhook():
     else:
         abort(400)
 
-## งานที่ต้องทำ
-def FindTask(userProfile):
-    reply = []
-    # results = collection.find({"order_to":userProfile},{"_id":0,"order_to":0,"task":1,"deadline":1,"created_at":1,"order_by":1,"done_at":0})
-    results = collection.find({"order_to":userProfile,"status":"In Progress"})
-    for result in results:
-        deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
-        createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
-        if datetime.now() > result['deadline'] :
-            status = 'เกินกำหนด'
-        else:
-            status = 'ยังไม่เลยกำหนด'
-        messageBack = {"type":"text",
-                    "text":"งาน : {}\nกำหนดส่ง : {}\nสั่งโดย : {}\nตั้งแต่วันที่ : {}\nสถานะ : {}".format(result["task"],deadline,result["order_by"],createAt,status)
-                    }
-        reply.append(messageBack)
-    return reply
 
-## งานที่สั่ง
-def FindFollowTask(userProfile):
-    reply = [] 
-    results = collection.find({"order_by":userProfile, "status":"In Progress"})
-    for result in results:
-        deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
-        createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
-        if datetime.now() > result['deadline'] :
-            status = 'เกินกำหนด'
-        else:
-            status = 'ยังไม่เลยกำหนด'
-        messageBack = {"type":"text",
-                    "text":"งาน : {}\nกำหนดส่ง : {}\nสั่งโดย : {}\nตั้งแต่วันที่ : {}\nสถานะ : {}".format(result["task"],deadline,result["order_by"],createAt,status)
-                    }
-        reply.append(messageBack)
-    return reply
-
-## เพิ่มงาน
-def InsertTask(message,userProfile,userID,groupID):
-    nameTag = ''
-    tagCount = message.count('@')
-    task = message.lower().split("#task ")[1].split("#")[0]
-    if '#by' not in message.lower() :
-        by = 'To night'
-    else :
-        by = message.lower().split("#by ")[1].split()[0]
-    by += '/2020'
-    ts =  int(datetime.strptime(by,"%d/%m/%Y").timestamp())
-    dt = (datetime.fromtimestamp(int(ts))).strftime('%Y-%m-%d %H:%M:%S')
-    dtObj =  datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
-    for i in range (tagCount) :
-        if i+1 == tagCount:
-            tag = message.split('@')[i+1].split(' ')[0]
-        else:
-            tag = message.split('@')[i+1]
-        nameTag += tag + ' '
-        data = {"order_to":tag,
-                "task":task,
-                "deadline":dtObj,
-                "created_at":datetime.now(),
-                "done_at":datetime.min,
-                "order_by":userProfile,
-                "from_id":userID,
-                "group_id":groupID,
-                "status":"In Progress"}
-
-        collection.insert_one(data)
-
-    return nameTag,task,by
