@@ -18,3 +18,17 @@ pip install Flask
 pip install requests
 
 ngrok http {port}
+
+For wsl
+
+sudo apt-get install python-pip
+
+sudo pip install virtualenv
+
+create folder env
+
+virtualenv -p python3 env
+
+source env/bin/activate
+
+exit : deactivate
