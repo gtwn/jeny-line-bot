@@ -2,4 +2,4 @@ from Project import app
 
 
 if __name__ == '__main__':
-    app.run(port = 155)
+    app.run(port = 2555)
