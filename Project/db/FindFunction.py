@@ -18,8 +18,12 @@ def FindTask(userID):
         else:
             status = 'ยังไม่เลยกำหนด'
         messageBack = {"type":"text",
-                    "text":"งาน : {}\nกำหนดส่ง : {}\nสั่งโดย : {}\nตั้งแต่วันที่ : {}\nสถานะ : {}".format(result["task"],deadline,result["order_by"],createAt,status)
+                    "text":"งาน : {}\nกำหนดส่ง : {}\nสั่งโดย : `@{}`\nตั้งแต่วันที่ : {}\nสถานะ : `{}`".format(result["task"],deadline,result["order_by"],createAt,status)
                     }
+        reply.append(messageBack)
+    if not reply:
+        messageBack = {"type":"text",
+                    "text": "คุณยังไม่มีงานที่ต้องทำ"}
         reply.append(messageBack)
     return reply
 
@@ -35,7 +39,11 @@ def FindFollowTask(userID):
         else:
             status = 'ยังไม่เลยกำหนด'
         messageBack = {"type":"text",
-                    "text":"งาน : {}\nกำหนดส่ง : {}\nสั่งโดย : {}\nตั้งแต่วันที่ : {}\nสถานะ : {}".format(result["task"],deadline,result["order_by"],createAt,status)
+                    "text":"งาน : {}\nกำหนดส่ง : {}\nสั่งโดย : `@{}`\nตั้งแต่วันที่ : {}\nผู้รับผิดชอบ: `@{}`\nสถานะ : {}".format(result["task"],deadline,result["order_by"],createAt,result["order_to"],status)
                     }
+        reply.append(messageBack)
+    if not reply:
+        messageBack = {"type":"text",
+                    "text": "คุณยังไม่ได้มีการสั่งงาน"}
         reply.append(messageBack)
     return reply

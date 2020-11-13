@@ -32,6 +32,30 @@ def ReplyMessage(ReplyToken, TextMessage, ChannelAccessToken):
     
     return 200
 
+def ReplyRmdMessage(ReplyToken, TextMessage, ChannelAccessToken):
+    LINE_API = 'https://api.line.me/v2/bot/message/reply'
+
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+
+    headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': Authorization
+    }
+
+    data = {
+        "replyToken": ReplyToken,
+        "messages":[{
+            "type":"text",
+            "text":TextMessage
+        }]
+    }
+    data = json.dumps(data) ## Dump dict >> Json obj
+    print('data : ',data)
+
+    r = requests.post(LINE_API,headers=headers,data=data)
+    
+    return 200
+
 def PushMessage(ChannelAccessToken):
     api = 'https://api.line.me/v2/bot/message/multicast'
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
