@@ -11,12 +11,15 @@ collection = db["task"]
 def InsertTask(message,userProfile,userID,groupID,memberIds):
     nameTag = ''
     tagCount = message.count('@')
-    task = message.lower().split("#task ")[1].split("#")[0]
-    if '#by' not in message.lower() :
-        by = 'To night'
-    else :
-        by = message.lower().split("#by ")[1].split()[0]
-    by += '/2020'
+    # task = message.lower().split("#task ")[1].split("#")[0]
+    # if '#by' not in message.lower() :
+    #     by = 'To night'
+    # else :
+    #     by = message.lower().split("#by ")[1].split()[0]
+    # by += '/2020'
+    task = message.split("#งาน ")[1].split("#")[0]
+    by = message.split("#ส่ง ")[1].split()[0] + '/2020'
+    # by += '/2020'
     ts =  int(datetime.strptime(by,"%d/%m/%Y").timestamp())
     dt = (datetime.fromtimestamp(int(ts))).strftime('%Y-%m-%d %H:%M:%S')
     dtObj =  datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
@@ -40,7 +43,7 @@ def InsertTask(message,userProfile,userID,groupID,memberIds):
     for uid in memberIds['memberIds']:
         display = GetUserProfile(uid,Channel_Access_Token)
         if display in message:
-            nameTag += display + ' '
+            nameTag += '@'+display + ' '
             data = {"order_to":display,
                     "task":task,
                     "deadline":dtObj,

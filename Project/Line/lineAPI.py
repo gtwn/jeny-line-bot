@@ -20,10 +20,7 @@ def ReplyMessage(ReplyToken, TextMessage, ChannelAccessToken):
         "messages":[{
             "type":"text",
             "text":"รับทราบค่ะ"
-        },{
-            "type":"text",
-            "text":TextMessage
-        }]
+        },TextMessage]
     }
     data = json.dumps(data) ## Dump dict >> Json obj
     print('data : ',data)
@@ -32,22 +29,140 @@ def ReplyMessage(ReplyToken, TextMessage, ChannelAccessToken):
     
     return 200
 
-def ReplyRmdMessage(ReplyToken, TextMessage, ChannelAccessToken):
+def ReplyRmdMessage(ReplyToken, ChannelAccessToken):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
 
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
 
+    # headers = {
+    #     'Content-Type': 'application/json; charset=UTF-8',
+    #     'Authorization': Authorization
+    # }
+
     headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json',
         'Authorization': Authorization
     }
 
     data = {
         "replyToken": ReplyToken,
-        "messages":[{
-            "type":"text",
-            "text":TextMessage
-        }]
+        "messages":[
+            {
+                "type": "flex",
+                "altText": "Flex Message",
+                "contents": {
+                    "type": "bubble",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2020/11/16/bHCVfS.jpg",
+                    "size": "full",
+                    "aspectMode": "cover",
+                    "aspectRatio": "20:13"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "margin": "lg",
+                        "spacing": "sm",
+                        "contents": [
+                        {
+                            "type": "text",
+                            "text": "คำสั่งในการสั่งงาน",
+                            "size": "lg",
+                            "color": "#ffb75e",
+                            "flex": 0,
+                            "weight": "bold"
+                        },
+                        {
+                            "type": "text",
+                            "text": "#สั่งงาน @name #งาน รายละเอียดงาน...",
+                            "size": "sm",
+                            "color": "#ffffff"
+                        },
+                        {
+                            "type": "text",
+                            "text": "#ส่ง วัน/เดือน",
+                            "size": "sm",
+                            "color": "#ffffff"
+                        },
+                        {
+                            "type": "separator",
+                            "margin": "lg",
+                            "color": "#ff864a"
+                        },
+                        {
+                            "type": "text",
+                            "text": "คำสั่งดูงานที่ต้องทำ",
+                            "margin": "lg",
+                            "color": "#ffb75e",
+                            "size": "lg",
+                            "weight": "bold"
+                        },
+                        {
+                            "type": "text",
+                            "text": "#งานที่ต้องทำ",
+                            "margin": "md",
+                            "size": "sm",
+                            "color": "#ffffff"
+                        },
+                        {
+                            "type": "separator",
+                            "margin": "lg",
+                            "color": "#ff864a"
+                        },
+                        {
+                            "type": "text",
+                            "text": "คำสั่งดูงานที่สั่ง",
+                            "margin": "lg",
+                            "color": "#ffb75e",
+                            "size": "lg",
+                            "weight": "bold"
+                        },
+                        {
+                            "type": "text",
+                            "text": "#งานที่สั่ง",
+                            "margin": "md",
+                            "size": "sm",
+                            "color": "#ffffff",
+                            "weight": "regular"
+                        },
+                        {
+                            "type": "separator",
+                            "margin": "lg",
+                            "color": "#ff864a"
+                        },
+                        {
+                            "type": "text",
+                            "text": "ตรวจสอบงานผ่านเว็บไซต์",
+                            "margin": "lg",
+                            "color": "#ffb75e",
+                            "size": "lg",
+                            "weight": "bold"
+                        },
+                        {
+                            "type": "text",
+                            "text": "www..",
+                            "margin": "md",
+                            "size": "sm",
+                            "action": {
+                            "type": "uri",
+                            "label": "action",
+                            "uri": "http://linecorp.com/"
+                            },
+                            "color": "#ffffff"
+                        }
+                        ]
+                    }
+                    ],"backgroundColor": "#454545"
+                    }
+                }
+                
+            }
+        ]
     }
     data = json.dumps(data) ## Dump dict >> Json obj
     print('data : ',data)
@@ -57,20 +172,38 @@ def ReplyRmdMessage(ReplyToken, TextMessage, ChannelAccessToken):
     return 200
 
 def PushMessage(ChannelAccessToken):
-    api = 'https://api.line.me/v2/bot/message/multicast'
+    api = 'https://api.line.me/v2/bot/message/push '
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
 
     headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json',
         'Authorization': Authorization
     }
 
     data = {
-        "to": ["Ucb533ae43957da0da8ef0289843f6ae6","U4bb6255362dbd86c9b941d36f85cb8d1","Uae4fc581117126f7ac87e1096ed77ead"],
-        "messages":[{
-            "type":"text",
-            "text":"มีข้อความเข้าในกลุ่ม CE-Project 2020 ค่ะ"
-        }]
+        "to": "Uae4fc581117126f7ac87e1096ed77ead",
+        "messages":[
+            {"type": "flex",
+            "altText": "This is a Flex Message",
+            "contents": {
+                "type": "bubble",
+                "body": {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                    {
+                    "type": "text",
+                    "text": "Hello,"
+                    },
+                    {
+                    "type": "text",
+                    "text": "World!"
+                    }
+                ]
+                }
+            }
+            }
+        ]
     }
     data = json.dumps(data)
 
