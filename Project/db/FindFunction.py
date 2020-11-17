@@ -15,16 +15,45 @@ def FindTask(userID):
         createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
         if datetime.now() > result['deadline'] :
             status = 'เกินกำหนด'
+            color = "#FF4646FF"
         else:
             status = 'ยังไม่เลยกำหนด'
-        messageBack = {"type":"text",
-                    "text":"งาน : {}\nกำหนดส่ง : {}\nสั่งโดย : `@{}`\nตั้งแต่วันที่ : {}\nสถานะ : `{}`".format(result["task"],deadline,result["order_by"],createAt,status)
-                    }
+            color = "#FFFFFFFF"
+        # messageBack = {"type":"text",
+        #             "text":"งาน : {}\nกำหนดส่ง : {}\nสั่งโดย : `@{}`\nตั้งแต่วันที่ : {}\nสถานะ : `{}`".format(result["task"],deadline,result["order_by"],createAt,status)
+        #             }
+        # reply.append(messageBack)
+
+        messageBack = {
+                        "type": "box",
+                        "layout": "baseline",
+                        "paddingBottom": "5px",
+                        "contents": [
+                        {
+                            "type": "text",
+                            "text": result["task"],
+                            "weight": "bold",
+                            "size": "md",
+                            "color": "#FFFFFFFF",
+                            "align": "start",
+                            "contents": []
+                        },
+                        {
+                            "type": "text",
+                            "text": deadline,
+                            "weight": "bold",
+                            "size": "md",
+                            "color": color,
+                            "align": "end",
+                            "contents": []
+                        }
+                        ]
+        }
         reply.append(messageBack)
-    if not reply:
-        messageBack = {"type":"text",
-                    "text": "คุณยังไม่มีงานที่ต้องทำ"}
-        reply.append(messageBack)
+    # if not reply:
+    #     messageBack = {"type":"text",
+    #                 "text": "คุณยังไม่มีงานที่ต้องทำ"}
+    #     reply.append(messageBack)
     return reply
 
 ## งานที่สั่ง
@@ -36,14 +65,75 @@ def FindFollowTask(userID):
         createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
         if datetime.now() > result['deadline'] :
             status = 'เกินกำหนด'
+            color = "#FF4646FF"
+
         else:
             status = 'ยังไม่เลยกำหนด'
-        messageBack = {"type":"text",
-                    "text":"งาน : {}\nกำหนดส่ง : {}\nสั่งโดย : `@{}`\nตั้งแต่วันที่ : {}\nผู้รับผิดชอบ: `@{}`\nสถานะ : {}".format(result["task"],deadline,result["order_by"],createAt,result["order_to"],status)
+            color = "#FFFFFFFF"
+        # messageBack = {"type":"text",
+        #             "text":"งาน : {}\nกำหนดส่ง : {}\nสั่งโดย : `@{}`\nตั้งแต่วันที่ : {}\nผู้รับผิดชอบ: `@{}`\nสถานะ : {}".format(result["task"],deadline,result["order_by"],createAt,result["order_to"],status)
+        #             }
+        messageBack = {
+                            "type": "box",
+                            "layout": "baseline",
+                            "margin": "md",
+                            "paddingBottom": "5px",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": result["task"],
+                                "weight": "bold",
+                                "size": "md",
+                                "color": "#FFFFFFFF",
+                                "align": "start",
+                                "contents": []
+                            },
+                            {
+                                "type": "text",
+                                "text": deadline,
+                                "weight": "bold",
+                                "size": "md",
+                                "color": color,
+                                "align": "end",
+                                "contents": []
+                            }
+                            ]
+                        }
+        reply.append(messageBack)
+        cmd =   {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "ผู้รับผิดชอบ :",
+                        "weight": "bold",
+                        "size": "md",
+                        "color": "#FFFFFFFF",
+                        "align": "start",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": '@'+result["order_to"],
+                        "weight": "bold",
+                        "color": "#5AD5C1FF",
+                        "align": "end",
+                        "contents": []
                     }
-        reply.append(messageBack)
-    if not reply:
-        messageBack = {"type":"text",
-                    "text": "คุณยังไม่ได้มีการสั่งงาน"}
-        reply.append(messageBack)
+                    ]
+                }
+        reply.append(cmd)
+        sp  =   {
+                "type": "separator",
+                "margin": "lg",
+                "color": "#ECB865"
+                } 
+        
+        reply.append(sp)
+
+    # if not reply:
+    #     messageBack = {"type":"text",
+    #                 "text": "คุณยังไม่ได้มีการสั่งงาน"}
+    #     reply.append(messageBack)
     return reply

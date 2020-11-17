@@ -29,7 +29,7 @@ def ReplyMessage(ReplyToken, TextMessage, ChannelAccessToken):
     
     return 200
 
-def ReplyRmdMessage(ReplyToken, ChannelAccessToken):
+def ReplyRmdMessage(ReplyToken,msg, ChannelAccessToken):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
 
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
@@ -47,121 +47,7 @@ def ReplyRmdMessage(ReplyToken, ChannelAccessToken):
     data = {
         "replyToken": ReplyToken,
         "messages":[
-            {
-                "type": "flex",
-                "altText": "Flex Message",
-                "contents": {
-                    "type": "bubble",
-                "hero": {
-                    "type": "image",
-                    "url": "https://sv1.picz.in.th/images/2020/11/16/bHCVfS.jpg",
-                    "size": "full",
-                    "aspectMode": "cover",
-                    "aspectRatio": "20:13"
-                },
-                "body": {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                    {
-                        "type": "box",
-                        "layout": "vertical",
-                        "margin": "lg",
-                        "spacing": "sm",
-                        "contents": [
-                        {
-                            "type": "text",
-                            "text": "คำสั่งในการสั่งงาน",
-                            "size": "lg",
-                            "color": "#ffb75e",
-                            "flex": 0,
-                            "weight": "bold"
-                        },
-                        {
-                            "type": "text",
-                            "text": "#สั่งงาน @name #งาน รายละเอียดงาน...",
-                            "size": "sm",
-                            "color": "#ffffff"
-                        },
-                        {
-                            "type": "text",
-                            "text": "#ส่ง วัน/เดือน",
-                            "size": "sm",
-                            "color": "#ffffff"
-                        },
-                        {
-                            "type": "separator",
-                            "margin": "lg",
-                            "color": "#ff864a"
-                        },
-                        {
-                            "type": "text",
-                            "text": "คำสั่งดูงานที่ต้องทำ",
-                            "margin": "lg",
-                            "color": "#ffb75e",
-                            "size": "lg",
-                            "weight": "bold"
-                        },
-                        {
-                            "type": "text",
-                            "text": "#งานที่ต้องทำ",
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#ffffff"
-                        },
-                        {
-                            "type": "separator",
-                            "margin": "lg",
-                            "color": "#ff864a"
-                        },
-                        {
-                            "type": "text",
-                            "text": "คำสั่งดูงานที่สั่ง",
-                            "margin": "lg",
-                            "color": "#ffb75e",
-                            "size": "lg",
-                            "weight": "bold"
-                        },
-                        {
-                            "type": "text",
-                            "text": "#งานที่สั่ง",
-                            "margin": "md",
-                            "size": "sm",
-                            "color": "#ffffff",
-                            "weight": "regular"
-                        },
-                        {
-                            "type": "separator",
-                            "margin": "lg",
-                            "color": "#ff864a"
-                        },
-                        {
-                            "type": "text",
-                            "text": "ตรวจสอบงานผ่านเว็บไซต์",
-                            "margin": "lg",
-                            "color": "#ffb75e",
-                            "size": "lg",
-                            "weight": "bold"
-                        },
-                        {
-                            "type": "text",
-                            "text": "www..",
-                            "margin": "md",
-                            "size": "sm",
-                            "action": {
-                            "type": "uri",
-                            "label": "action",
-                            "uri": "http://linecorp.com/"
-                            },
-                            "color": "#ffffff"
-                        }
-                        ]
-                    }
-                    ],"backgroundColor": "#454545"
-                    }
-                }
-                
-            }
+            msg
         ]
     }
     data = json.dumps(data) ## Dump dict >> Json obj
@@ -225,7 +111,7 @@ def ReplyTaskMessage(ReplyToken,ReplyMessage,ChannelAccessToken):
 
     data = {
         "replyToken": ReplyToken,
-        "messages":ReplyMessage
+        "messages": [ReplyMessage]
     }
     data = json.dumps(data) ## Dump dict >> Json obj
     print('data : ',data)

@@ -35,13 +35,6 @@ def webhook():
             
             replyMessage = 'Say Hi from ' + userID + 'in groupID' + groupID
             ReplyMessage(replyToken,replyMessage,Channel_Access_Token)
-        # if 'jeny' in message.lower() and '#order' in message.lower():
-        #     profile = GetUserProfile(userID,Channel_Access_Token)
-        #     memberIds = GetMemberUserIDs(groupID,Channel_Access_Token)
-        #     listIDs = ast.literal_eval(memberIds) ## แปลง string  เป็น list <class dict>
-        #     orderTo,task,by = InsertTask(message,profile,userID,groupID,listIDs)
-        #     replyMessage = '*รายละเอียดการสั่งงาน*\nสั่งงานคุณ: `@{}`\nรายละเอียดงาน: {}\nกำหนดส่ง: {}\nสั่งโดย: `@{}`'.format(orderTo,task,by,profile)
-        #     ReplyMessage(replyToken,replyMessage,Channel_Access_Token)
         if '#สั่งงาน' in message:     # #สั่งงาน @name #งาน รายละเอียดงาน #ส่ง วัน/เดือน
             profile = GetUserProfile(userID,Channel_Access_Token)
             memberIds = GetMemberUserIDs(groupID,Channel_Access_Token)
@@ -52,15 +45,18 @@ def webhook():
             ReplyMessage(replyToken,replyMessage,Channel_Access_Token)
         if '#คำสั่งแนะนำ' in message:
             # replyMsg = '*คำสั่งแนะนำ*\n*ต้องการสั่งงาน*:\n`Jeny #Order @... #Task .... #By date/month`\n*ต้องการดูงานที่ต้องทำ*: `#งานที่ต้องทำ`\n*ต้องการดูงานที่สั่ง*: `#งานที่สั่ง`'
-            ReplyRmdMessage(replyToken,Channel_Access_Token)
+            replyMsg = FlexRmd()
+            ReplyRmdMessage(replyToken,replyMsg,Channel_Access_Token)
             # PushMessage(Channel_Access_Token)
-        if '#งานที่ต้องส่ง' in message or '#งานที่ต้องทำ' in message :
+        if '#งานที่ต้องทำ' in message :
             profile = GetUserProfile(userID,Channel_Access_Token)
-            reply = FindTask(userID)
+            task = FindTask(userID)
+            reply = FlexMyTask(task)
             ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
         if '#งานที่สั่ง' in message :
             profile = GetUserProfile(userID,Channel_Access_Token)
-            reply = FindFollowTask(userID)
+            task = FindFollowTask(userID)
+            reply = FlexFollowTask(task)
             ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
         # else :
         #     ReplyTaskMessage(replyToken,'คำสั่งแนะนำ\n ต้องการสั่งงาน:\n Jeny #Order @... #Task .... #By date/month\n ต้องการดูงานที่ต้องทำ: #งานที่ต้องทำ\n',Channel_Access_Token)
