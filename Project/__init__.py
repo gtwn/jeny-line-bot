@@ -31,7 +31,7 @@ def webhook():
             replyMsg = FlexRmd()
             ReplyHelloMessage(replyToken,replyMsg,Channel_Access_Token)
         else:
-            message = payload['events'][0]['message']['text']
+            message = (payload['events'][0]['message']['text']).replace('\u200b','')
             sourceType = payload['events'][0]['source']['type']
             userID = payload['events'][0]['source']['userId']
 

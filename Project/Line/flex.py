@@ -131,7 +131,7 @@ def FlexRmd():
                         },
                         {
                             "type": "text",
-                            "text": "#สั่งงาน @name #งาน รายละเอียดงาน...",
+                            "text": "#สั่งงาน @name รายละเอียดงาน",
                             "size": "sm",
                             "color": "#ffffff"
                         },
