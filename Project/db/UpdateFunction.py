@@ -7,7 +7,7 @@ from Project.Line.lineAPI import *
 
 collection = db["task"]
 
-def RejectTask(message,memberIds,userID):
+def RejectTaskInGroup(message,memberIds,userID):
     tagCount = message.count('@')
     count = 0
     task = message.split("#ยกเลิกงาน ")[1].split("@")[0]
@@ -20,7 +20,7 @@ def RejectTask(message,memberIds,userID):
             print(uid)
             print("task:"+task.strip())
             taskQuery = {"task":task.strip(),"order_id":uid,"from_id":userID}
-            setValue = { "$set": {"status":"Done"}}
+            setValue = { "$set": {"status":"Reject","done_at":datetime.now()}}
             # sort = [('creation_date', pymongo.ASCENDING)]
             # updated_doc = collection.find_one_and_update(taskQuery, setValue,sort=sort,
             #                 return_document=ReturnDocument.AFTER)
@@ -41,5 +41,28 @@ def RejectTask(message,memberIds,userID):
             user.append(messageBack)
         if count == tagCount:
             break
+
+    return task,user
+
+def RejectTask(message,memberIds,userID):
+    tagCount = message.count('@')
+    count = 0
+    task = message.split("#ยกเลิกงาน ")[1].split("@")[0]
+    userTag = (message.split("@")[1]).strip()
+    user = []
+    taskQuery = {"task":task.strip(),"from_id":userID,"order_to":userTag}
+    setValue = { "$set": {"status":"Reject","done_at":datetime.now()}}
+    collection.update_many(taskQuery,setValue)
+    messageBack = {
+                    "type": "text",
+                    "text": "@"+userTag,
+                    "weight": "bold",
+                    "size": "md",
+                    "color": "#F93636FF",
+                    "align": "start",
+                    "margin": "sm",
+                    "contents": []
+    }
+    user.append(messageBack)
 
     return task,user

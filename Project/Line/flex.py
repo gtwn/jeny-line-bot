@@ -204,6 +204,15 @@ def FlexRmd():
                             "weight": "regular"
                         },
                         {
+                            "type": "text",
+                            "text": "หรือใช้ #ยกเลิก และกดที่ชื่องานเพื่อยกเลิก",
+                            "margin": "md",
+                            "size": "sm",
+                            "color": "#ffffff",
+                            "weight": "regular"
+                        }
+                        ,
+                        {
                             "type": "separator",
                             "margin": "lg",
                             "color": "#ff864a"

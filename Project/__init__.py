@@ -53,12 +53,12 @@ def webhook():
                     replyMessage = FlexDetailTask(task,deadline,orderTo,profile)
                     # replyMessage = '*รายละเอียดการสั่งงาน*\nสั่งงานคุณ: `@{}`\nรายละเอียดงาน: {}\nกำหนดส่ง: {}\nสั่งโดย: `@{}`'.format(orderTo,task,by,profile)
                     ReplyMessage(replyToken,replyMessage,Channel_Access_Token,orderIds)
-            if '#คำสั่งแนะนำ' in message:
+            elif '#คำสั่งแนะนำ' in message:
                 # replyMsg = '*คำสั่งแนะนำ*\n*ต้องการสั่งงาน*:\n`Jeny #Order @... #Task .... #By date/month`\n*ต้องการดูงานที่ต้องทำ*: `#งานที่ต้องทำ`\n*ต้องการดูงานที่สั่ง*: `#งานที่สั่ง`'
                 replyMsg = FlexRmd()
                 ReplyRmdMessage(replyToken,replyMsg,Channel_Access_Token)
                 # PushMessage(Channel_Access_Token)
-            if '#งานที่ต้องทำ' in message :
+            elif '#งานที่ต้องทำ' in message :
                 profile = GetUserProfile(userID,Channel_Access_Token)
                 if groupID == '':
                     task = FindTask(userID)
@@ -66,7 +66,7 @@ def webhook():
                     task = FindTaskInGroup(userID,groupID)
                 reply = FlexMyTask(task)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
-            if '#งานที่สั่ง' in message :
+            elif '#งานที่สั่ง' in message :
                 profile = GetUserProfile(userID,Channel_Access_Token)
                 print('groupID:',groupID)
                 if groupID == '':
@@ -76,13 +76,35 @@ def webhook():
                 # print('return task:',task)
                 reply = FlexFollowTask(task)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
-            if '#ยกเลิกงาน' in message:
+            elif '#ยกเลิกงาน' in message:
                 profile = GetUserProfile(userID,Channel_Access_Token)
                 memberIds = GetMemberUserIDs(groupID,Channel_Access_Token)
                 listIDs = ast.literal_eval(memberIds) ## แปลง string  เป็น list <class dict>
-                task,user = RejectTask(message,listIDs,userID)
+                if groupID == '':
+                    task,user = RejectTask(message,listIDs,userID)
+                else:
+                    task,user = RejectTaskInGroup(message,listIDs,userID)
+
                 reply = FlexRejectTask(task,user)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
+            elif '#ยกเลิก' in message:
+                profile = GetUserProfile(userID,Channel_Access_Token)
+                print('groupID:',groupID)
+                if groupID == '':
+                    task = RejectFollowTask(userID)
+                else:
+                    task = RejectFollowTaskInGroup(userID,groupID)
+                reply = FlexFollowTask(task)
+                ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
+            else:
+                if groupID == '':
+                    replyMsg = FlexRmd()
+                    ReplyHelloMessage(replyToken,replyMsg,Channel_Access_Token)
+                elif ('#ยก' or '#งาน' or '#สั่ง') in message:
+                    replyMsg = FlexRmd()
+                    ReplyRmdMessage(replyToken,replyMsg,Channel_Access_Token)
+
+
         # else :
         #     ReplyTaskMessage(replyToken,'คำสั่งแนะนำ\n ต้องการสั่งงาน:\n Jeny #Order @... #Task .... #By date/month\n ต้องการดูงานที่ต้องทำ: #งานที่ต้องทำ\n',Channel_Access_Token)
         return request.json,200

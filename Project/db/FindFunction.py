@@ -249,3 +249,168 @@ def FindFollowTaskInGroup(userID,groupID):
         reply.append(sp)
 
     return reply
+
+
+
+## ค้นหางานที่สั่งสำหรับยกเลิก
+def RejectFollowTask(userID):
+    reply = [] 
+    results = collection.find({"from_id":userID, "status":"In Progress"})
+    for result in results:
+        deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
+        createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
+        if datetime.now() > result['deadline'] :
+            status = 'เกินกำหนด'
+            color = "#FF4646FF"
+
+        else:
+            status = 'ยังไม่เลยกำหนด'
+            color = "#FFFFFFFF"
+        messageBack = {
+                            "type": "box",
+                            "layout": "baseline",
+                            "margin": "md",
+                            "paddingBottom": "5px",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": result["task"],
+                                "weight": "bold",
+                                "size": "md",
+                                "color": "#FFFFFFFF",
+                                "align": "start",
+                                "wrap": true,
+                                "action": {
+                                    "type": "message",
+                                    "label": "ยกเลิกงาน"+result["task"],
+                                    "text": "#ยกเลิกงาน "+result["task"]+" @"+result["order_to"]
+                                },
+                                "contents": []
+                            },
+                            {
+                                "type": "text",
+                                "text": deadline,
+                                "weight": "bold",
+                                "size": "md",
+                                "color": color,
+                                "align": "end",
+                                "contents": []
+                            }
+                            ]
+                        }
+        reply.append(messageBack)
+        cmd =   {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "ผู้รับผิดชอบ :",
+                        "weight": "bold",
+                        "size": "md",
+                        "color": "#FFFFFFFF",
+                        "align": "start",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": '@'+result["order_to"],
+                        "weight": "bold",
+                        "color": "#5AD5C1FF",
+                        "align": "end",
+                        "contents": []
+                    }
+                    ]
+                }
+        reply.append(cmd)
+        sp  =   {
+                "type": "separator",
+                "margin": "lg",
+                "color": "#ECB865"
+                } 
+        
+        reply.append(sp)
+    return reply
+
+
+## ยกเลิกงานที่สั่งในกลุ่ม
+def RejectFollowTaskInGroup(userID,groupID):
+    reply = [] 
+    results = collection.find({"from_id":userID,"group_id":groupID, "status":"In Progress"})
+    for result in results:
+        deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
+        createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
+        if datetime.now() > result['deadline'] :
+            status = 'เกินกำหนด'
+            color = "#FF4646FF"
+
+        else:
+            status = 'ยังไม่เลยกำหนด'
+            color = "#FFFFFFFF"
+
+        messageBack = {
+                            "type": "box",
+                            "layout": "baseline",
+                            "margin": "md",
+                            "paddingBottom": "5px",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": result["task"],
+                                "weight": "bold",
+                                "size": "md",
+                                "color": "#FFFFFFFF",
+                                "align": "start",
+                                "wrap": true,
+                                "action": {
+                                    "type": "message",
+                                    "label": "ยกเลิกงาน"+result["task"],
+                                    "text": "#ยกเลิกงาน "+result["task"]+" @"+result["order_to"]
+                                },
+                                "contents": []
+                            },
+                            {
+                                "type": "text",
+                                "text": deadline,
+                                "weight": "bold",
+                                "size": "md",
+                                "color": color,
+                                "align": "end",
+                                "contents": []
+                            }
+                            ]
+                        }
+        reply.append(messageBack)
+        cmd =   {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "ผู้รับผิดชอบ :",
+                        "weight": "bold",
+                        "size": "md",
+                        "color": "#FFFFFFFF",
+                        "align": "start",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": '@'+result["order_to"],
+                        "weight": "bold",
+                        "color": "#5AD5C1FF",
+                        "align": "end",
+                        "contents": []
+                    }
+                    ]
+                }
+        reply.append(cmd)
+        sp  =   {
+                "type": "separator",
+                "margin": "lg",
+                "color": "#ECB865"
+                } 
+        
+        reply.append(sp)
+
+    return reply
