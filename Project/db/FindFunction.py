@@ -32,6 +32,7 @@ def FindTask(userID):
                             "size": "md",
                             "color": "#FFFFFFFF",
                             "align": "start",
+                            "wrap": true,
                             "contents": []
                         },
                         {
@@ -77,6 +78,7 @@ def FindTaskInGroup(userID,groupID):
                             "size": "md",
                             "color": "#FFFFFFFF",
                             "align": "start",
+                            "wrap": true,
                             "contents": []
                         },
                         {
@@ -122,6 +124,7 @@ def FindFollowTask(userID):
                                 "size": "md",
                                 "color": "#FFFFFFFF",
                                 "align": "start",
+                                "wrap": true,
                                 "contents": []
                             },
                             {
@@ -198,6 +201,7 @@ def FindFollowTaskInGroup(userID,groupID):
                                 "size": "md",
                                 "color": "#FFFFFFFF",
                                 "align": "start",
+                                "wrap": true,
                                 "contents": []
                             },
                             {

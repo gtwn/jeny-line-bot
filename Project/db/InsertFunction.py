@@ -23,6 +23,7 @@ def InsertTask(message,userProfile,userID,groupID,memberIds):
     ts =  int(datetime.strptime(by,"%d/%m/%Y").timestamp())
     dt = (datetime.fromtimestamp(int(ts))).strftime('%Y-%m-%d %H:%M:%S')
     dtObj =  datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
+    
     for uid in memberIds['memberIds']:
         display = GetUserProfile(uid,Channel_Access_Token)
         print(display)
