@@ -46,10 +46,13 @@ def webhook():
                 memberIds = GetMemberUserIDs(groupID,Channel_Access_Token)
                 listIDs = ast.literal_eval(memberIds) ## แปลง string  เป็น list <class dict>
                 print(listIDs)
-                orderTo,task,deadline = InsertTask(message,profile,userID,groupID,listIDs)
-                replyMessage = FlexDetailTask(task,deadline,orderTo,profile)
-                # replyMessage = '*รายละเอียดการสั่งงาน*\nสั่งงานคุณ: `@{}`\nรายละเอียดงาน: {}\nกำหนดส่ง: {}\nสั่งโดย: `@{}`'.format(orderTo,task,by,profile)
-                ReplyMessage(replyToken,replyMessage,Channel_Access_Token)
+                orderTo,task,deadline,orderIds = InsertTask(message,profile,userID,groupID,listIDs)
+                if not orderTo:
+                    ReplyRejectMessage(replyToken,Channel_Access_Token)
+                else:
+                    replyMessage = FlexDetailTask(task,deadline,orderTo,profile)
+                    # replyMessage = '*รายละเอียดการสั่งงาน*\nสั่งงานคุณ: `@{}`\nรายละเอียดงาน: {}\nกำหนดส่ง: {}\nสั่งโดย: `@{}`'.format(orderTo,task,by,profile)
+                    ReplyMessage(replyToken,replyMessage,Channel_Access_Token,orderIds)
             if '#คำสั่งแนะนำ' in message:
                 # replyMsg = '*คำสั่งแนะนำ*\n*ต้องการสั่งงาน*:\n`Jeny #Order @... #Task .... #By date/month`\n*ต้องการดูงานที่ต้องทำ*: `#งานที่ต้องทำ`\n*ต้องการดูงานที่สั่ง*: `#งานที่สั่ง`'
                 replyMsg = FlexRmd()

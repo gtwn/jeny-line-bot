@@ -403,9 +403,7 @@ def FlexMyTask(task):
     return message
 
 def FlexFollowTask(task):
-    # print('task:',task)
     if not task:
-        print('if')
         message = {
             "type": "flex",
                     "altText": "งานที่สั่ง",
@@ -476,7 +474,6 @@ def FlexFollowTask(task):
                     }
             }
     else:
-        print('else')
         message = {
             "type": "flex",
                     "altText": "งานที่สั่ง",

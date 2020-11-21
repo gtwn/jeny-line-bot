@@ -4,10 +4,11 @@ import requests
 import json
 
 
-
-def ReplyMessage(ReplyToken, TextMessage, ChannelAccessToken):
+# reply คำสั่งงาน
+def ReplyMessage(ReplyToken, TextMessage, ChannelAccessToken,UserIDs):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
-
+    LINE_API_MultiCast = 'https://api.line.me/v2/bot/message/multicast'
+    LINE_API_Push = 'https://api.line.me/v2/bot/message/push'
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
 
     headers = {
@@ -21,6 +22,50 @@ def ReplyMessage(ReplyToken, TextMessage, ChannelAccessToken):
             "type":"text",
             "text":"รับทราบค่ะ"
         },TextMessage]
+    }
+    data = json.dumps(data) ## Dump dict >> Json obj
+    # print('data : ',data)
+    print('UserIDs',UserIDs)
+    if len(UserIDs) == 1 :
+        LINE_API_Reply = LINE_API_Push
+        ID = UserIDs[0]
+        
+    else:
+        LINE_API_Reply = LINE_API_MultiCast
+        ID = UserIDs
+  
+    mymessage = {
+            "to": ID,
+            "messages": [ {
+                "type":"text",
+                "text":"มีการสั่งงานเข้ามาใหม่\nกรุณาตรวจสอบงานด้วยค่ะ"
+            }
+            ]
+    }
+
+    print('Line',LINE_API_Reply)
+    print('ID',ID)
+    mymessage = json.dumps(mymessage)
+    r = requests.post(LINE_API,headers=headers,data=data)
+    rp = requests.post(LINE_API_Reply,headers=headers,data=mymessage)
+    
+    print(rp)
+    return 200
+
+def ReplyRejectMessage(ReplyToken, ChannelAccessToken):
+    LINE_API = 'https://api.line.me/v2/bot/message/reply'
+
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+
+    headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': Authorization
+    }
+
+    data = {
+        "replyToken": ReplyToken,
+        "messages": [{"type":"text",
+            "text":"ไม่สามารถสั่งงานย้อนหลังได้ค่ะ"}]
     }
     data = json.dumps(data) ## Dump dict >> Json obj
     # print('data : ',data)

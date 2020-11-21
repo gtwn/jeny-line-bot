@@ -18,13 +18,14 @@ def RejectTask(message,memberIds,userID):
 
         if display in message:
             print(uid)
-            print("task:"+task.strip()+"ab")
+            print("task:"+task.strip())
             taskQuery = {"task":task.strip(),"order_id":uid,"from_id":userID}
             setValue = { "$set": {"status":"Done"}}
             # sort = [('creation_date', pymongo.ASCENDING)]
             # updated_doc = collection.find_one_and_update(taskQuery, setValue,sort=sort,
             #                 return_document=ReturnDocument.AFTER)
             # print(updated_doc)
+            
             collection.update_many(taskQuery,setValue)
             count += 1
             messageBack = {

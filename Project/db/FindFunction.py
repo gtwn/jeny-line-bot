@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from Project.db.ConfigDB import *
 
 collection = db["task"]
-
+true = True
 ## งานที่ต้องทำ
 def FindTask(userID):
     reply = []
