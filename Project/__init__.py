@@ -31,7 +31,7 @@ def webhook():
             replyMsg = FlexRmd()
             ReplyHelloMessage(replyToken,replyMsg,Channel_Access_Token)
         else:
-            message = (payload['events'][0]['message']['text']).replace('\u200b','')
+            message = ((payload['events'][0]['message']['text']).replace('\u200b','')).strip()
             sourceType = payload['events'][0]['source']['type']
             userID = payload['events'][0]['source']['userId']
 
@@ -94,7 +94,13 @@ def webhook():
                     task = RejectFollowTask(userID)
                 else:
                     task = RejectFollowTaskInGroup(userID,groupID)
-                reply = FlexFollowTask(task)
+                reply = FlexFollowTaskReject(task)
+                ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
+            elif '#ประวัติงาน' in message:
+                profile = GetUserProfile(userID,Channel_Access_Token)
+
+                task = FindHistory(userID,groupID)
+                reply = HistoryTask(task)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
             else:
                 if groupID == '':

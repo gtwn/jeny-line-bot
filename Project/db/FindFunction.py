@@ -414,3 +414,75 @@ def RejectFollowTaskInGroup(userID,groupID):
         reply.append(sp)
 
     return reply
+
+def FindHistory(userID,groupID):
+    reply = [] 
+
+    # รายบุคคล
+    if groupID == '':
+        results = collection.find({"$and":[{"$or":[{"status":"Reject"},{"status":"Done"}]},{"$or":[{"order_id":userID},{"from_id":userID}]}]}).sort('done_at',pymongo.DESCENDING).limit(5)
+    else:
+        results = collection.find({"$and":[{"$or":[{"status":"Reject"},{"status":"Done"}]},{"$or":[{"order_id":userID},{"from_id":userID}]},{"group_id":groupID}]}).sort('done_at',pymongo.DESCENDING).limit(5)   #ในกลุ่ม
+
+    for result in results:
+        
+        messageBack = {
+                            "type": "box",
+                            "layout": "baseline",
+                            "margin": "md",
+                            "paddingBottom": "5px",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": result["task"],
+                                "weight": "bold",
+                                "size": "md",
+                                "color": "#FFFFFFFF",
+                                "align": "start",
+                                "wrap": true,
+                                "contents": []
+                            },
+                            {
+                                "type": "text",
+                                "text": result["status"],
+                                "weight": "bold",
+                                "size": "md",
+                                "color": "#FFFFFFFF",
+                                "align": "end",
+                                "contents": []
+                            }
+                            ]
+                        }
+        reply.append(messageBack)
+        cmd =   {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "ผู้รับผิดชอบ :",
+                        "weight": "bold",
+                        "size": "md",
+                        "color": "#FFFFFFFF",
+                        "align": "start",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": '@'+result["order_to"],
+                        "weight": "bold",
+                        "color": "#FF8050FF",
+                        "align": "end",
+                        "contents": []
+                    }
+                    ]
+                }
+        reply.append(cmd)
+        sp  =   {
+                "type": "separator",
+                "margin": "lg",
+                "color": "#ECB865"
+                } 
+        
+        reply.append(sp)
+    return reply

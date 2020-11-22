@@ -25,7 +25,6 @@ def RejectTaskInGroup(message,memberIds,userID):
             # updated_doc = collection.find_one_and_update(taskQuery, setValue,sort=sort,
             #                 return_document=ReturnDocument.AFTER)
             # print(updated_doc)
-            
             collection.update_many(taskQuery,setValue)
             count += 1
             messageBack = {
