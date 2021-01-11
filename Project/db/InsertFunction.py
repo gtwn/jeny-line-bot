@@ -3,7 +3,7 @@ import pymongo
 from pymongo import MongoClient
 from Project.db.ConfigDB import *
 from Project.Line.lineAPI import *
-
+import pytz
 
 collection = db["task"]
 
@@ -14,14 +14,14 @@ def InsertTask(message,userProfile,userID,groupID,memberIds):
     count = 0
     tagCount = message.count('@')
     now = datetime.now()
-    # task = message.split("#งาน")[1].split("#")[0]
-    listMessage = (message.split('@')[tagCount].split('#ส่ง')[0]).split(' ')
-    task = ' '.join(str(x) for x in listMessage[1:])
+    task = message.split("#งาน")[1].split("#ส่ง")[0]
+    # listMessage = (message.split('@')[tagCount].split('#ส่ง')[0]).split(' ')
+    # task = ' '.join(str(x) for x in listMessage[1:])
     by = message.split("#ส่ง")[1].split()[0] + '/'+str(now.year)
     ts =  int(datetime.strptime(by,"%d/%m/%Y").timestamp())
     dt = (datetime.fromtimestamp(int(ts))).strftime('%Y-%m-%d %H:%M:%S')
     dtObj =  datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
-    if date.today() > dtObj.date():
+    if datetime.now() > dtObj:
         print("can't assign")
         # mymessage = {"type":"text",
         #     "text":"ไม่สามารถสั่งงานย้อนหลังได้ค่ะ"}

@@ -1,4 +1,5 @@
 from flask import Flask ,  request, abort
+from Project.Line.flex import *
 
 import requests
 import json
@@ -133,6 +134,39 @@ def ReplyHelloMessage(ReplyToken,msg, ChannelAccessToken):
     
     return 200
 
+## ตามงงาน
+def ReplyFollowTask(msg, ChannelAccessToken):
+    api = 'https://api.line.me/v2/bot/message/push'
+
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': Authorization
+    }
+    #ส่งยืนยันการตามงาน
+    sendToCMD = {
+        "to": msg["from_id"],
+        "messages":[{
+                "type":"text",
+                "text":"ติดตามงานเรียบร้อย"
+            }
+        ]
+    }
+    #ส่งให้คนถูกสั่งงาน
+    bb = BubbleFollow(msg)
+    print("bb:",bb)
+    sendToOR = {
+        "to": msg["from_id"],
+        "messages": [bb]
+    }
+
+    msgToME = json.dumps(sendToCMD)
+    msgToOR = json.dumps(sendToOR)
+    resME = requests.post(api,headers=headers,data=msgToME)
+    resOR = requests.post(api,headers=headers,data=msgToOR)
+    
+    return 200
 
 # ตอบกลับคำสั่งขอดูงาน
 def ReplyTaskMessage(ReplyToken,ReplyMessage,ChannelAccessToken):
@@ -163,7 +197,8 @@ def GetGroupSummary(GroupID,ChannelAccessToken):
         'Authorization': Authorization
     }
     resp = requests.get(api,headers=headers)
-    return resp.text
+    jsLoads = json.loads(resp.text)
+    return jsLoads["groupName"]
 
 def GetMemberUserIDs(GroupID,ChannelAccessToken):
     api = 'https://api.line.me/v2/bot/group/{}/members/ids'.format(GroupID)

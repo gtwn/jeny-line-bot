@@ -102,6 +102,14 @@ def webhook():
                 task = FindHistory(userID,groupID)
                 reply = HistoryTask(task)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
+            elif '#ตามงาน' in message:
+                task = FollowTask(userID)
+                reply = FlexFollow(task)
+                ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
+            elif '#Follow' in message:
+                taskID = message.split(" ")[1]
+                result = FindTaskByID(taskID)
+                ReplyFollowTask(result,Channel_Access_Token)
             else:
                 if groupID == '':
                     replyMsg = FlexRmd()
