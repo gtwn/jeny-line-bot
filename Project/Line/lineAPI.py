@@ -158,7 +158,7 @@ def ReplyFollowTask(msg, ChannelAccessToken):
     bb = BubbleFollow(msg)
     print("bb:",bb)
     sendToOR = {
-        "to": msg["from_id"],
+        "to": msg["order_id"],
         "messages": [bb]
     }
 
@@ -204,7 +204,7 @@ def ReplyReviewTask(msg, ChannelAccessToken):
     }
     #ส่งยืนยันการตามงาน
     sendToCMD = {
-        "to": msg["from_id"],
+        "to": msg["order_id"],
         "messages":[{
                 "type":"text",
                 "text":"ส่งงานเรียบร้อย รอการตรวจสอบ"
@@ -268,7 +268,7 @@ def ReplyAcceptRejectMessage(msg,status, ChannelAccessToken):
     }
     #ส่งยืนยันการตรวจสอบงานให้ผู้ถูกสั่งงาน
     sendToOR = {
-        "to": msg["from_id"],
+        "to": msg["order_id"],
         "messages":[{
                 "type":"text",
                 "text":"คุณ:"+msg["order_by"]+"\nตรวจงาน: "+msg["task"]+"\nสถานะ: "+status

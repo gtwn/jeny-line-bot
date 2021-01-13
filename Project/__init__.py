@@ -150,7 +150,7 @@ def webhook():
                     ReplyErrorTransaction(userID,Channel_Access_Token)
                 else:
                     status = 'ผ่านการตรวจสอบ'
-                    result = RejectTaskByID(message,userID)
+                    result = RejectTaskByID(message)
                     ReplyAcceptRejectMessage(result,status,Channel_Access_Token)
             else:
                 if groupID == '':
