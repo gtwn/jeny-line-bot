@@ -602,6 +602,114 @@ def FollowTask(userID):
         reply.append(sp)
     return reply
 
+def ListTaskForSend(userID):
+    reply = [] 
+    results = collection.find({"order_id":userID, "status":"In Progress"})
+    for result in results:
+        deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
+        createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
+        if datetime.now() > result['deadline'] :
+            status = 'เกินกำหนด'
+            color = "#FF4646FF"
+
+        else:
+            status = 'ยังไม่เลยกำหนด'
+            color = "#FFFFFFFF"
+
+        group = GetGroupSummary(result["group_id"],Channel_Access_Token)
+        print("group_id:",group)
+        messageBack = {
+                            "type": "box",
+                            "layout": "baseline",
+                            "margin": "md",
+                            "paddingBottom": "5px",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": result["task"],
+                                "weight": "bold",
+                                "size": "md",
+                                "color": "#FFFFFFFF",
+                                "align": "start",
+                                "wrap": true,
+                                "action": {
+                                    "type": "message",
+                                    "label": "ตามงาน"+result["task"],
+                                    "text": "#Info "+str(result["_id"])+" "+result["task"]
+                                },
+                                "contents": []
+                            },
+                            {
+                                "type": "text",
+                                "text": deadline,
+                                "weight": "bold",
+                                "size": "md",
+                                "color": color,
+                                "align": "end",
+                                "contents": []
+                            }
+                            ]
+                        }
+        reply.append(messageBack)
+        cmd =   {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "ผู้สั่งงาน :",
+                        "weight": "bold",
+                        "size": "md",
+                        "color": "#FFFFFFFF",
+                        "align": "start",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": '@'+result["order_by"],
+                        "weight": "bold",
+                        "color": "#5AD5C1FF",
+                        "align": "end",
+                        "contents": []
+                    }
+                    ]
+                }
+        reply.append(cmd)
+        grp = {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "xs",
+            "margin": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "text": "กลุ่ม :",
+                "weight": "bold",
+                "size": "md",
+                "color": "#FFFFFFFF",
+                "contents": []
+              },
+              {
+                "type": "text",
+                "text": group,
+                "weight": "bold",
+                "color": "#FFFFFFFF",
+                "align": "end",
+                "wrap": true,
+                "position": "relative",
+                "contents": []
+              }
+            ]
+          }
+        reply.append(grp)
+        sp  =   {
+                "type": "separator",
+                "margin": "lg",
+                "color": "#ECB865"
+                } 
+        
+        reply.append(sp)
+    return reply
 
 ## หางาน by id
 def FindTaskByID(taskID):

@@ -4,6 +4,11 @@ from pymongo import MongoClient
 from pymongo.collection import ReturnDocument
 from Project.db.ConfigDB import *
 from Project.Line.lineAPI import *
+from Project.db.FindFunction import *
+
+
+from bson.objectid import ObjectId
+
 
 collection = db["task"]
 
@@ -65,3 +70,30 @@ def RejectTask(message,memberIds,userID):
     user.append(messageBack)
 
     return task,user
+
+def ReviewTaskByID(message,userID):
+    taskID = message.split(" ")[1]
+    result = FindTaskByID(taskID)
+    taskQuery = {"_id":ObjectId(taskID),"order_id":userID}
+    setValue = { "$set": {"status":"Review"}}
+    collection.update_one(taskQuery,setValue)
+    
+    return result
+
+def AcceptTaskByID(message,userID):
+    taskID = message.split(" ")[1]
+    result = FindTaskByID(taskID)
+    taskQuery = {"_id":ObjectId(taskID),"from_id":userID}
+    setValue = { "$set": {"status":"Done","done_at":datetime.now()}}
+    collection.update_one(taskQuery,setValue)
+    
+    return result
+
+def RejectTaskByID(message):
+    taskID = message.split(" ")[1]
+    result = FindTaskByID(taskID)
+    taskQuery = {"_id":ObjectId(taskID)}
+    setValue = { "$set": {"status":"In Progress"}}
+    collection.update_one(taskQuery,setValue)
+    
+    return result

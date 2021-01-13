@@ -89,11 +89,11 @@ def ReplyRmdMessage(ReplyToken,msg, ChannelAccessToken):
         'Content-Type': 'application/json',
         'Authorization': Authorization
     }
-
+    m = Menu()
     data = {
         "replyToken": ReplyToken,
         "messages":[
-            msg
+            Menu()
         ]
     }
     data = json.dumps(data) ## Dump dict >> Json obj
@@ -103,6 +103,7 @@ def ReplyRmdMessage(ReplyToken,msg, ChannelAccessToken):
     
     return 200
 
+## แสดงตอน Add BOT
 def ReplyHelloMessage(ReplyToken,msg, ChannelAccessToken):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
 
@@ -134,7 +135,7 @@ def ReplyHelloMessage(ReplyToken,msg, ChannelAccessToken):
     
     return 200
 
-## ตามงงาน
+## ตามงาน
 def ReplyFollowTask(msg, ChannelAccessToken):
     api = 'https://api.line.me/v2/bot/message/push'
 
@@ -168,6 +169,62 @@ def ReplyFollowTask(msg, ChannelAccessToken):
     
     return 200
 
+# ก่อนส่งงาน
+def ReplyInfoTask(userID,msg, ChannelAccessToken):
+    api = 'https://api.line.me/v2/bot/message/push'
+
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': Authorization
+    }
+   
+    #ส่ง info ให้เรา
+    bb = BubbleInfoTask(msg)
+    sendToOR = {
+        "to": userID,
+        "messages": [bb]
+    }
+
+    data = json.dumps(sendToOR)
+    resOR = requests.post(api,headers=headers,data=data)
+    
+    return 200
+
+## ส่งเมื่อกด Send Work
+def ReplyReviewTask(msg, ChannelAccessToken):
+    api = 'https://api.line.me/v2/bot/message/push'
+
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': Authorization
+    }
+    #ส่งยืนยันการตามงาน
+    sendToCMD = {
+        "to": msg["from_id"],
+        "messages":[{
+                "type":"text",
+                "text":"ส่งงานเรียบร้อย รอการตรวจสอบ"
+            }
+        ]
+    }
+    #ส่งให้คนตรวจงาน
+    bb = BubbleReviewTask(msg)
+    sendToOR = {
+        "to": msg["from_id"],
+        "messages": [bb]
+    }
+
+    msgToME = json.dumps(sendToCMD)
+    msgToOR = json.dumps(sendToOR)
+    resME = requests.post(api,headers=headers,data=msgToME)
+    resOR = requests.post(api,headers=headers,data=msgToOR)
+    
+    return 200
+
 # ตอบกลับคำสั่งขอดูงาน
 def ReplyTaskMessage(ReplyToken,ReplyMessage,ChannelAccessToken):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
@@ -189,6 +246,71 @@ def ReplyTaskMessage(ReplyToken,ReplyMessage,ChannelAccessToken):
     r = requests.post(LINE_API,headers=headers,data=data)
     
     return 200
+
+## ยืนยันการส่งงาน
+def ReplyAcceptRejectMessage(msg,status, ChannelAccessToken):
+    api = 'https://api.line.me/v2/bot/message/push'
+
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': Authorization
+    }
+    #ส่งยืนยันการยอมรับงาน
+    sendToCMD = {
+        "to": msg["from_id"],
+        "messages":[{
+                "type":"text",
+                "text":"ตรวจงาน:"+msg["task"]+"\nสถานะ: "+status
+            }
+        ]
+    }
+    #ส่งยืนยันการตรวจสอบงานให้ผู้ถูกสั่งงาน
+    sendToOR = {
+        "to": msg["from_id"],
+        "messages":[{
+                "type":"text",
+                "text":"คุณ:"+msg["order_by"]+"\nตรวจงาน: "+msg["task"]+"\nสถานะ: "+status
+            }
+        ]
+    }
+
+    msgToME = json.dumps(sendToCMD)
+    msgToOR = json.dumps(sendToOR)
+    resME = requests.post(api,headers=headers,data=msgToME)
+    resOR = requests.post(api,headers=headers,data=msgToOR)
+    
+    return 200
+
+
+## ไม่สามารถทำรายการได้
+def ReplyErrorTransaction(userID,ChannelAccessToken):
+    api = 'https://api.line.me/v2/bot/message/push'
+
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': Authorization
+    }
+    #ส่งยืนยันการยอมรับงาน
+    sendToCMD = {
+        "to": userID,
+        "messages":[{
+                "type":"text",
+                "text":"ไม่สามารถทำรายการได้"
+            }
+        ]
+    }
+
+    data = json.dumps(sendToCMD)
+    resME = requests.post(api,headers=headers,data=data)
+
+    return 200
+
+
+
 
 def GetGroupSummary(GroupID,ChannelAccessToken):
     api = 'https://api.line.me/v2/bot/group/{}/summary'.format(GroupID)

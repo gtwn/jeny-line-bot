@@ -984,7 +984,7 @@ def FlexFollow(task):
     if not task:
         message = {
             "type": "flex",
-                    "altText": "งานที่สั่ง",
+                    "altText": "ตามงาน",
                     "contents": {
                             "type": "bubble",
                             "size": "mega",
@@ -1146,6 +1146,172 @@ def FlexFollow(task):
     return message
 
 
+# ส่งงาน
+def FlexTaskList(task):
+    if not task:
+        message = {
+            "type": "flex",
+                    "altText": "ส่งงาน",
+                    "contents": {
+                            "type": "bubble",
+                            "size": "mega",
+                            "direction": "ltr",
+                            "hero": {
+                                "type": "image",
+                                "url": "https://sv1.picz.in.th/images/2021/01/11/lZ43IS.jpg",
+                                "margin": "none",
+                                "size": "full",
+                                "aspectMode": "cover",
+                                "aspectRatio": "16:5",
+                                "backgroundColor": "#FFB657"
+                            },
+                            "body": {
+                                "type": "box",
+                                "layout": "vertical",
+                                "backgroundColor": "#454545",
+                                "contents": [
+                                {
+                                    "type": "box",
+                                    "layout": "vertical",
+                                    "margin": "md",
+                                    "paddingStart": "10px",
+                                    "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": "คุณยังไม่มีการสั่งงาน",
+                                        "weight": "bold",
+                                        "size": "lg",
+                                        "color": "#FFFFFFFF",
+                                        "align": "center",
+                                        "margin": "md",
+                                        "contents": []
+                                    },
+                                    {
+                                        "type": "spacer",
+                                        "size": "lg"
+                                    }
+                                    ]
+                                }
+                                ]
+                            },
+                            "footer": {
+                                "type": "box",
+                                "layout": "vertical",
+                                "flex": 0,
+                                "spacing": "sm",
+                                "margin": "sm",
+                                "contents": [
+                                {
+                                    "type": "text",
+                                    "text": "สามารถตรวจสอบงานเพิ่มเติมได้ที่",
+                                    "weight": "bold",
+                                    "size": "md",
+                                    "margin": "md",
+                                    "contents": []
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "www.",
+                                    "contents": []
+                                }
+                                ]
+                            }
+                    }
+            }
+    else:
+        message = {
+            "type": "flex",
+                    "altText": "ส่งงาน",
+                    "contents": {
+                "type": "bubble",
+                "size": "mega",
+                "direction": "ltr",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/01/11/lZ4Ttn.jpg",
+                    "margin": "none",
+                    "size": "full",
+                    "aspectRatio": "16:5",
+                    "aspectMode": "cover",
+                    "backgroundColor": "#FFB657"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "backgroundColor": "#454545",
+                    "contents": [
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "backgroundColor": "#454545",
+                        "contents": [
+                        {
+                            "type": "text",
+                            "text": "ชื่องาน",
+                            "weight": "bold",
+                            "size": "lg",
+                            "color": "#FFB75E",
+                            "flex": 0,
+                            "align": "start",
+                            "margin": "md",
+                            "contents": []
+                        },
+                        {
+                            "type": "text",
+                            "text": "กำหนดส่ง",
+                            "weight": "bold",
+                            "size": "lg",
+                            "color": "#FFB75E",
+                            "align": "end",
+                            "contents": []
+                        }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "margin": "none",
+                        "paddingStart": "10px",
+                        "contents": task
+                    }
+                    ]
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "flex": 0,
+                    "spacing": "xs",
+                    "margin": "sm",
+                    "paddingStart": "20px",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "*เลยกำหนดส่งงาน",
+                        "weight": "bold",
+                        "size": "md",
+                        "color": "#FF4646FF",
+                        "margin": "xs",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "สามารถตรวจสอบงานเพิ่มเติมได้ที่",
+                        "weight": "bold",
+                        "size": "md",
+                        "margin": "sm",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "www.",
+                        "contents": []
+                    }
+                    ]
+                }
+                }
+        }
+    return message
+
 # response ตามงาน
 def BubbleFollow(task):
     deadline = datetime.strftime(task["deadline"],"%d %b, %Y")
@@ -1177,7 +1343,7 @@ def BubbleFollow(task):
                     "contents": [
                     {
                         "type": "text",
-                        "text": "Test",
+                        "text": task["task"],
                         "weight": "bold",
                         "size": "xl",
                         "flex": 0,
@@ -1208,7 +1374,7 @@ def BubbleFollow(task):
                     "action": {
                     "type": "message",
                     "label": "Send Work",
-                    "text": "#send "+str(task["_id"])+" "+task["task"]
+                    "text": "#Send "+str(task["_id"])+" "+task["task"]
                     },
                     "color": "#FF9B00FF",
                     "style": "primary"
@@ -1216,6 +1382,225 @@ def BubbleFollow(task):
                 ]
             }
             }
+    }
+
+    return message
+
+
+def BubbleInfoTask(task):
+    deadline = datetime.strftime(task["deadline"],"%d %b, %Y")
+
+    message = {
+        "type": "flex",
+        "altText": "ข้อมูลก่อนส่งงาน",
+        "contents": {
+            "type": "bubble",
+            "size": "kilo",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                {
+                    "type": "text",
+                    "text": "รายละเอียดงาน",
+                    "weight": "bold",
+                    "size": "xl",
+                    "wrap": True,
+                    "contents": []
+                },
+                {
+                    "type": "box",
+                    "layout": "baseline",
+                    "flex": 1,
+                    "margin": "md",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": task["task"],
+                        "weight": "bold",
+                        "size": "xl",
+                        "flex": 0,
+                        "wrap": True,
+                        "contents": []
+                    }
+                    ]
+                },
+                {
+                    "type": "text",
+                    "text": "ผู้สั่งงาน: "+task["order_by"],
+                    "size": "sm",
+                    "color": "#FF5551",
+                    "flex": 0,
+                    "margin": "md",
+                    "wrap": True,
+                    "contents": []
+                },
+                {
+                    "type": "text",
+                    "text": "กำหนดส่ง: "+deadline,
+                    "size": "sm",
+                    "color": "#FF5551",
+                    "flex": 0,
+                    "margin": "md",
+                    "wrap": True,
+                    "contents": []
+                }
+                ]
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                {
+                    "type": "button",
+                    "action": {
+                    "type": "message",
+                    "label": "Send Work",
+                    "text": "#Send "+str(task["_id"])+" "+task["task"]
+                    },
+                    "color": "#FF9B00FF",
+                    "style": "primary"
+                }
+                ]
+            }
+            }
+    }
+
+    return message
+
+def BubbleReviewTask(task):
+    message = {
+        "type": "flex",
+        "altText": "มีการส่งงานจาก"+task["order_to"],
+        "contents":{
+            "type": "bubble",
+            "size": "kilo",
+            "direction": "ltr",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "backgroundColor": "#454545",
+                "contents": [
+                {
+                    "type": "text",
+                    "text": "ตรวจงาน : "+task["task"],
+                    "color": "#FFFFFFFF",
+                    "wrap":True,
+                    "contents": []
+                },
+                {
+                    "type": "text",
+                    "text": "ผู้รับผิดชอบ : "+task["order_to"],
+                    "color": "#FFFFFFFF",
+                    "contents": []
+                }
+                ]
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "xs",
+                "margin": "sm",
+                "paddingStart": "20px",
+                "backgroundColor": "#FFFFFFFF",
+                "contents": [
+                {
+                    "type": "box",
+                    "layout": "horizontal",
+                    "spacing": "md",
+                    "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                        "type": "message",
+                        "label": "Reject",
+                        "text": "#Reject "+str(task["_id"])+" "+task["task"]
+                        },
+                        "color": "#C93131FF",
+                        "height": "md",
+                        "style": "primary"
+                    },
+                    {
+                        "type": "button",
+                        "action": {
+                        "type": "message",
+                        "label": "Accept",
+                        "text": "#Accept "+str(task["_id"])+" "+task["task"]
+                        },
+                        "height": "md",
+                        "style": "primary"
+                    }
+                    ]
+                }
+                ]
+            }
+            }
+    }
+
+    return message
+
+
+
+def Menu():
+    message = {
+    "type": "template",
+    "altText": "คำสั่งแนะนำ",
+    "template": {
+        "type": "image_carousel",
+        "columns": [
+            {
+                "imageUrl": "https://sv1.picz.in.th/images/2020/11/22/bF7S7z.jpg",
+                "aspectRatio": "11:12",
+                "action": {
+                    "type": "message",
+                    "text": "#งานที่สั่ง"
+                }
+            },
+            {
+                "imageUrl": "https://sv1.picz.in.th/images/2020/11/16/bH6Ira.jpg",
+                "aspectRatio": "11:12",
+                "action": {
+                    "type": "message",
+                    "text": "#งานที่ต้องทำ"
+                }
+            },
+            {
+                "imageUrl": "https://sv1.picz.in.th/images/2020/11/18/bXAHd8.jpg",
+                "aspectRatio": "11:12",
+                "action": {
+                    "type": "message",
+                    "text": "#ยกเลิก"
+                }
+            },
+            {
+                "imageUrl": "https://sv1.picz.in.th/images/2020/11/22/byV65J.jpg",
+                "aspectRatio": "11:12",
+                "action": {
+                    "type": "message",
+                    "text": "#ส่งงาน"
+                }
+            },
+            {
+                "imageUrl": "https://sv1.picz.in.th/images/2021/01/11/lZ4Ttn.jpg",
+                "aspectRatio": "11:12",
+                "action": {
+                    "type": "message",
+                    "text": "#ตามงาน"
+                }
+            },
+            {
+                "imageUrl": "https://sv1.picz.in.th/images/2020/11/22/byVouW.jpg",
+                "aspectRatio": "11:12",
+                "action": {
+                    "type": "message",
+                    "text": "#ประวัติงาน"
+                }
+            }]
+        }
     }
 
     return message

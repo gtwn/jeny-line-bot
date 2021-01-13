@@ -103,13 +103,55 @@ def webhook():
                 reply = HistoryTask(task)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
             elif '#ตามงาน' in message:
-                task = FollowTask(userID)
-                reply = FlexFollow(task)
-                ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
-            elif '#Follow' in message:
+                if groupID == '':
+                    task = FollowTask(userID)
+                    reply = FlexFollow(task)
+                    ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
+            elif '#ส่งงาน' in message:
+                if groupID == '':
+                    task = ListTaskForSend(userID)
+                    reply = FlexTaskList(task)
+                    ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
+            elif '#Info' in message:
                 taskID = message.split(" ")[1]
                 result = FindTaskByID(taskID)
-                ReplyFollowTask(result,Channel_Access_Token)
+                if result["status"] != 'In Progress':
+                    ReplyErrorTransaction(userID,Channel_Access_Token)
+                else:
+                    ReplyInfoTask(userID,result,Channel_Access_Token)
+            elif '#Follow' in message:      
+                taskID = message.split(" ")[1]
+                result = FindTaskByID(taskID)
+                if result["status"] != 'In Progress':
+                    ReplyErrorTransaction(userID,Channel_Access_Token)
+                else:
+                    ReplyFollowTask(result,Channel_Access_Token)
+            elif '#Send' in message:
+                taskID = message.split(" ")[1]
+                result = FindTaskByID(taskID)
+                if result["status"] != 'In Progress':
+                    ReplyErrorTransaction(userID,Channel_Access_Token)
+                else:
+                    result = ReviewTaskByID(message,userID)
+                    ReplyReviewTask(result,Channel_Access_Token)
+            elif '#Accept' in message:
+                taskID = message.split(" ")[1]
+                result = FindTaskByID(taskID)
+                if result["status"] != 'Review':
+                    ReplyErrorTransaction(userID,Channel_Access_Token)
+                else:
+                    status = 'ผ่านการตรวจสอบ'
+                    result = AcceptTaskByID(message,userID)
+                    ReplyAcceptRejectMessage(result,status,Channel_Access_Token)
+            elif '#Reject' in message:
+                taskID = message.split(" ")[1]
+                result = FindTaskByID(taskID)
+                if result["status"] != 'Review':
+                    ReplyErrorTransaction(userID,Channel_Access_Token)
+                else:
+                    status = 'ผ่านการตรวจสอบ'
+                    result = RejectTaskByID(message,userID)
+                    ReplyAcceptRejectMessage(result,status,Channel_Access_Token)
             else:
                 if groupID == '':
                     replyMsg = FlexRmd()
