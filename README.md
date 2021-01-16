@@ -32,3 +32,6 @@ virtualenv -p python3 env
 source env/bin/activate
 
 exit : deactivate
+
+
+pip3 freeze > requirements.txt
