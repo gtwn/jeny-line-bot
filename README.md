@@ -25,6 +25,10 @@ sudo apt-get install python-pip
 
 sudo pip install virtualenv
 
+apt-get install python3-venv
+
+python3 -m venv {folder env}
+
 create folder env
 
 virtualenv -p python3 env
