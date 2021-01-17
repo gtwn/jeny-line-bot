@@ -4,6 +4,180 @@ from Project.Line.flex import *
 import requests
 import json
 
+def ReplyQuickMessageSayJeny(ReplyToken,GroupID,ChannelAccessToken):
+    api = 'https://api.line.me/v2/bot/message/reply'
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+
+    headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': Authorization
+    }
+
+    if GroupID == '':
+        data = {
+            "replyToken": ReplyToken,
+            "messages":[{
+                "type":"text",
+                "text":"สามารถเลือกคำสั่งที่ต้องการตามรายการด้านล่าง",
+                "quickReply":{
+                    "items":[
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbUsKf.png",
+                            "action": {
+                                "type":"message",
+                                "label":"คำสั่งแนะนำ",
+                                "text":"#คำสั่งแนะนำ"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqMGz.png",
+                            "action": {
+                                "type":"message",
+                                "label":"งานที่สั่ง",
+                                "text":"#งานที่สั่ง"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqaB1.png",
+                            "action": {
+                                "type":"message",
+                                "label":"งานที่ต้องทำ",
+                                "text":"#งานที่ต้องทำ"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqIlq.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ตามงาน",
+                                "text":"#ตามงาน"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5IMQ.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ส่งงาน",
+                                "text":"#ส่งงาน"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb50qR.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ยกเลิกงาน",
+                                "text":"#ยกเลิก"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5pJe.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ประวัติงาน",
+                                "text":"#ประวัติงาน"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5dB8.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ตรวจสอบงานผ่านเว็บไซต์",
+                                "text":"เว็ป"
+                            }
+                        }
+                    ]
+                }
+            }]
+        }
+    else:
+        data = {
+            "replyToken": ReplyToken,
+            "messages":[{
+                "type":"text",
+                "text":"สามารถเลือกคำสั่งที่ต้องการตามรายการด้านล่าง",
+                "quickReply":{
+                    "items":[
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbUsKf.png",
+                            "action": {
+                                "type":"message",
+                                "label":"คำสั่งแนะนำ",
+                                "text":"#คำสั่งแนะนำ"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbEczR.png",
+                            "action": {
+                                "type":"message",
+                                "label":"สั่งงาน",
+                                "text":"สั่งงาน"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqMGz.png",
+                            "action": {
+                                "type":"message",
+                                "label":"งานที่สั่ง",
+                                "text":"#งานที่สั่ง"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqaB1.png",
+                            "action": {
+                                "type":"message",
+                                "label":"งานที่ต้องทำ",
+                                "text":"#งานที่ต้องทำ"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb50qR.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ยกเลิกงาน",
+                                "text":"#ยกเลิก"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5pJe.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ประวัติงาน",
+                                "text":"#ประวัติงาน"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5dB8.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ตรวจสอบงานผ่านเว็บไซต์",
+                                "text":"เว็ป"
+                            }
+                        }
+                    ]
+                }
+            }]
+        }
+    data = json.dumps(data)
+
+    r = requests.post(api,headers=headers,data=data)
+
+    return 200
+
 
 # reply คำสั่งงาน
 def ReplyMessage(ReplyToken, TextMessage, ChannelAccessToken,UserIDs):
@@ -400,7 +574,6 @@ def PushMessage(ChannelAccessToken):
     r = requests.post(api,headers=headers,data=data)
     
     return 200
-
 
 
 def GetUserIdsFollowBot(ChannelAccessToken):

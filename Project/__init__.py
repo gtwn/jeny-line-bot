@@ -40,8 +40,9 @@ def webhook():
                 groupID = payload['events'][0]['source']['groupId']
             else:
                 groupID = ''
-
-            if '#สั่งงาน' in message:     # #สั่งงาน @name #งาน รายละเอียดงาน #ส่ง วัน/เดือน
+            if message == 'Jeny':
+                ReplyQuickMessageSayJeny(replyToken,groupID,Channel_Access_Token) 
+            elif '#สั่งงาน' in message:     # #สั่งงาน @name #งาน รายละเอียดงาน #ส่ง วัน/เดือน
                 profile = GetUserProfile(userID,Channel_Access_Token)
                 print('groupid:',groupID)
                 memberIds = GetMemberUserIDs(groupID,Channel_Access_Token)
