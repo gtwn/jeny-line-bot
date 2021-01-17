@@ -310,7 +310,25 @@ def ReplyErrorTransaction(userID,ChannelAccessToken):
     return 200
 
 
+def NotifyTask(userID,message,ChannelAccessToken):
+    api = 'https://api.line.me/v2/bot/message/push'
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
 
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': Authorization
+    }
+
+    data = {
+        "to": userID,
+        "messages":[message]
+    }
+
+    data = json.dumps(data)
+
+    r = requests.post(api,headers=headers,data=data)
+    
+    return 200
 
 def GetGroupSummary(GroupID,ChannelAccessToken):
     api = 'https://api.line.me/v2/bot/group/{}/summary'.format(GroupID)
@@ -382,3 +400,15 @@ def PushMessage(ChannelAccessToken):
     r = requests.post(api,headers=headers,data=data)
     
     return 200
+
+
+
+def GetUserIdsFollowBot(ChannelAccessToken):
+    api = "https://api.line.me/v2/bot/followers/ids"
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+    headers = {
+        'Authorization': Authorization
+    }
+    res = requests.get(api, headers=headers)
+    jsLoads = json.loads(res.text)
+    return jsLoads["userIds"]

@@ -16,7 +16,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return 'hello' , 200
+    message = json.dumps({"message": "hello"})
+    return message, 200
 
 @app.route('/webhook', methods=['POST','GET'])
 def webhook():
@@ -172,3 +173,9 @@ def webhook():
         abort(400)
 
 
+
+@app.route('/notify/task', methods=['GET'])
+def notifyTask():
+    userIds = GetUserIdsFollowBot(Channel_Access_Token)
+    message = FindTaskNotiToday(userIds)
+    return message,200

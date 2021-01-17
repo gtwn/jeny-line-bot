@@ -7,6 +7,10 @@ from Project.Line.lineAPI import *
 from bson.objectid import ObjectId
 
 
+from Project.Line.lineAPI import *
+from Project.Line.flex import *
+
+
 collection = db["task"]
 true = True
 ## งานที่ต้องทำ
@@ -715,3 +719,72 @@ def ListTaskForSend(userID):
 def FindTaskByID(taskID):
     result = collection.find_one({"_id": ObjectId(taskID)})
     return result
+
+
+def FindTaskNotiToday(userIds):
+
+    task = []
+    now = datetime.now()
+    dateString = str(now.year)+"-"+str(now.month)+"-"+str(now.day)
+    dateObj = datetime.strptime(dateString, '%Y-%m-%d')
+
+    for Id in userIds:
+        task = []
+        results = collection.find({"order_id":Id,"status":"In Progress","deadline":dateObj})
+        print("results",results)
+        for result in results:
+            print("r",result)
+            tFlex = {
+                        "type": "box",
+                        "layout": "baseline",
+                        "margin": "md",
+                        "paddingBottom": "5px",
+                        "contents": [
+                        {
+                            "type": "text",
+                            "text": result["task"],
+                            "weight": "bold",
+                            "size": "md",
+                            "color": "#FFFFFFFF",
+                            "align": "start",
+                            "contents": []
+                        }
+                        ]
+            }
+            task.append(tFlex)
+            orderFlex = {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [
+                        {
+                            "type": "text",
+                            "text": "ผู้สั่งงาน :",
+                            "weight": "bold",
+                            "size": "md",
+                            "color": "#FFFFFFFF",
+                            "align": "start",
+                            "contents": []
+                        },
+                        {
+                            "type": "text",
+                            "text": result["order_by"],
+                            "weight": "bold",
+                            "color": "#5AD5C1FF",
+                            "align": "end",
+                            "contents": []
+                        }
+                        ]
+            }
+            task.append(orderFlex)
+            sp = {
+                        "type": "separator",
+                        "margin": "lg",
+                        "color": "#ECB865"
+                    }
+
+            task.append(sp)
+
+        message = FlexTaskToday(task)
+        NotifyTask(Id,message,Channel_Access_Token)
+
+    return "Success"

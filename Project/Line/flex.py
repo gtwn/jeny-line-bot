@@ -654,6 +654,138 @@ def FlexRejectTask(task,user):
     return message
 
 
+def FlexTaskToday(task):
+    if not task:
+        message = {
+            "type": "flex",
+            "altText": "งานภายในวันนี้",
+            "contents": {
+                "type": "bubble",
+                "size": "mega",
+                "direction": "ltr",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/01/17/lbZII2.jpg",
+                    "margin": "none",
+                    "size": "full",
+                    "aspectRatio": "16:5",
+                    "aspectMode": "cover",
+                    "backgroundColor": "#FFB657"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "backgroundColor": "#454545",
+                    "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "margin": "none",
+                        "paddingStart": "10px",
+                        "contents": [
+                        {
+                            "type": "spacer"
+                        },
+                        {
+                            "type": "text",
+                            "text": "คุณไม่มีงานที่ต้องส่งภายในวันนี้",
+                            "weight": "bold",
+                            "color": "#FFFFFFFF",
+                            "align": "center",
+                            "contents": []
+                        },
+                        {
+                            "type": "spacer"
+                        }
+                        ]
+                    }
+                    ]
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "flex": 0,
+                    "spacing": "xs",
+                    "margin": "sm",
+                    "paddingStart": "20px",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "สามารถตรวจสอบงานเพิ่มเติมได้ที่",
+                        "weight": "bold",
+                        "size": "md",
+                        "margin": "sm",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "www.",
+                        "contents": []
+                    }
+                    ]
+                }
+                }
+        }
+    else:
+        message = {
+            "type": "flex",
+            "altText": "งานภายในวันนี้",
+            "contents": {
+                "type": "bubble",
+                "size": "mega",
+                "direction": "ltr",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/01/17/lbZII2.jpg",
+                    "margin": "none",
+                    "size": "full",
+                    "aspectRatio": "16:5",
+                    "aspectMode": "cover",
+                    "backgroundColor": "#FFB657"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "backgroundColor": "#454545",
+                    "contents": [
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "margin": "none",
+                        "paddingStart": "10px",
+                        "contents": task
+                    }
+                    ]
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "flex": 0,
+                    "spacing": "xs",
+                    "margin": "sm",
+                    "paddingStart": "20px",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "สามารถตรวจสอบงานเพิ่มเติมได้ที่",
+                        "weight": "bold",
+                        "size": "md",
+                        "margin": "sm",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "www.",
+                        "contents": []
+                    }
+                    ]
+                }
+                }
+        }
+    return message
+    
+
+
 def FlexFollowTaskReject(task):
     if not task:
         message = {
@@ -1542,6 +1674,7 @@ def BubbleReviewTask(task):
     }
 
     return message
+
 
 
 
