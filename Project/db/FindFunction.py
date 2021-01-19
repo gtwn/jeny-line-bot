@@ -289,9 +289,10 @@ def RejectFollowTask(userID):
                                 "align": "start",
                                 "wrap": true,
                                 "action": {
-                                    "type": "message",
+                                    "type": "postback",
                                     "label": "ยกเลิกงาน"+result["task"],
-                                    "text": "#ยกเลิกงาน "+result["task"]+" @"+result["order_to"]
+                                    "text":"ตรวจสอบการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(result["task"],result["order_to"]),
+                                    "data": "action=removeInfo&id={}".format(str(result["_id"]))
                                 },
                                 "contents": []
                             },
@@ -371,9 +372,9 @@ def RejectFollowTaskInGroup(userID,groupID):
                                 "align": "start",
                                 "wrap": true,
                                 "action": {
-                                    "type": "message",
-                                    "label": "ยกเลิกงาน"+result["task"],
-                                    "text": "#ยกเลิกงาน "+result["task"]+" @"+result["order_to"]
+                                    "type": "postback",
+                                    "text":"ตรวจสอบการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(result["task"],result["order_to"]),
+                                    "data": "action=removeInfo&id={}".format(str(result["_id"]))
                                 },
                                 "contents": []
                             },
@@ -528,9 +529,10 @@ def FollowTask(userID):
                                 "align": "start",
                                 "wrap": true,
                                 "action": {
-                                    "type": "message",
+                                    "type": "postback",
                                     "label": "ตามงาน"+result["task"],
-                                    "text": "#Follow "+str(result["_id"])+" "+result["task"]
+                                    "text": "ติดตามงาน\n{}".format(result["task"]),
+                                    "data": "action=follow&id={}".format(str(result["_id"]))
                                 },
                                 "contents": []
                             },
@@ -606,6 +608,7 @@ def FollowTask(userID):
         reply.append(sp)
     return reply
 
+#ส่งงาน
 def ListTaskForSend(userID):
     reply = [] 
     results = collection.find({"order_id":userID, "status":"In Progress"})
@@ -637,9 +640,9 @@ def ListTaskForSend(userID):
                                 "align": "start",
                                 "wrap": true,
                                 "action": {
-                                    "type": "message",
-                                    "label": "ตามงาน"+result["task"],
-                                    "text": "#Info "+str(result["_id"])+" "+result["task"]
+                                    "type": "postback",
+                                    "text": "ตรวจสอบข้อมูลการส่งงาน\n{}".format(result["task"]),
+                                    "data": "action=info&id={}".format(str(result["_id"]))
                                 },
                                 "contents": []
                             },

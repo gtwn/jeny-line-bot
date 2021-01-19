@@ -19,83 +19,10 @@ def ReplyQuickMessageSayJeny(ReplyToken,GroupID,ChannelAccessToken):
             "messages":[{
                 "type":"text",
                 "text":"สามารถเลือกคำสั่งที่ต้องการตามรายการด้านล่าง",
-                "quickReply":{
-                    "items":[
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbUsKf.png",
-                            "action": {
-                                "type":"message",
-                                "label":"คำสั่งแนะนำ",
-                                "text":"#คำสั่งแนะนำ"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqMGz.png",
-                            "action": {
-                                "type":"message",
-                                "label":"งานที่สั่ง",
-                                "text":"#งานที่สั่ง"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqaB1.png",
-                            "action": {
-                                "type":"message",
-                                "label":"งานที่ต้องทำ",
-                                "text":"#งานที่ต้องทำ"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqIlq.png",
-                            "action": {
-                                "type":"message",
-                                "label":"ตามงาน",
-                                "text":"#ตามงาน"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5IMQ.png",
-                            "action": {
-                                "type":"message",
-                                "label":"ส่งงาน",
-                                "text":"#ส่งงาน"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb50qR.png",
-                            "action": {
-                                "type":"message",
-                                "label":"ยกเลิกงาน",
-                                "text":"#ยกเลิก"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5pJe.png",
-                            "action": {
-                                "type":"message",
-                                "label":"ประวัติงาน",
-                                "text":"#ประวัติงาน"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5dB8.png",
-                            "action": {
-                                "type":"message",
-                                "label":"ตรวจสอบงานผ่านเว็บไซต์",
-                                "text":"เว็ป"
-                            }
-                        }
-                    ]
-                }
-            }]
+                "quickReply": QuickReply()
+            }
+            ]
+            
         }
     else:
         data = {
@@ -213,7 +140,8 @@ def ReplyMessage(ReplyToken, TextMessage, ChannelAccessToken,UserIDs):
             "to": ID,
             "messages": [ {
                 "type":"text",
-                "text":"มีการสั่งงานเข้ามาใหม่\nกรุณาตรวจสอบงานด้วยค่ะ"
+                "text":"มีการสั่งงานเข้ามาใหม่\nกรุณาตรวจสอบงานด้วยค่ะ",
+                "quickReply": QuickReply()
             }
             ]
     }
@@ -240,7 +168,9 @@ def ReplyRejectMessage(ReplyToken, ChannelAccessToken):
     data = {
         "replyToken": ReplyToken,
         "messages": [{"type":"text",
-            "text":"ไม่สามารถสั่งงานย้อนหลังได้ค่ะ"}]
+            "text":"ไม่สามารถสั่งงานย้อนหลังได้ค่ะ",
+            "quickReply": QuickReply()
+        }]
     }
     data = json.dumps(data) ## Dump dict >> Json obj
     # print('data : ',data)
@@ -324,7 +254,8 @@ def ReplyFollowTask(msg, ChannelAccessToken):
         "to": msg["from_id"],
         "messages":[{
                 "type":"text",
-                "text":"ติดตามงานเรียบร้อย"
+                "text":"ติดตามงาน {}\nเรียบร้อย".format(msg['task']),
+                "quickReply": QuickReply()
             }
         ]
     }
@@ -333,7 +264,8 @@ def ReplyFollowTask(msg, ChannelAccessToken):
     print("bb:",bb)
     sendToOR = {
         "to": msg["order_id"],
-        "messages": [bb]
+        "messages": [
+            bb ]
     }
 
     msgToME = json.dumps(sendToCMD)
@@ -344,8 +276,8 @@ def ReplyFollowTask(msg, ChannelAccessToken):
     return 200
 
 # ก่อนส่งงาน
-def ReplyInfoTask(userID,msg, ChannelAccessToken):
-    api = 'https://api.line.me/v2/bot/message/push'
+def ReplyInfoTask(replyToken,msg, ChannelAccessToken):
+    api = 'https://api.line.me/v2/bot/message/reply'
 
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
 
@@ -357,8 +289,10 @@ def ReplyInfoTask(userID,msg, ChannelAccessToken):
     #ส่ง info ให้เรา
     bb = BubbleInfoTask(msg)
     sendToOR = {
-        "to": userID,
-        "messages": [bb]
+        "replyToken": replyToken,
+        "messages": [
+            bb
+        ]
     }
 
     data = json.dumps(sendToOR)
@@ -366,9 +300,33 @@ def ReplyInfoTask(userID,msg, ChannelAccessToken):
     
     return 200
 
+def ReplyInfoCancelTask(replyToken,msg, ChannelAccessToken):
+    api = 'https://api.line.me/v2/bot/message/reply'
+
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': Authorization
+    }
+   
+    #ส่ง info ให้เรา
+    data = {
+        "replyToken": replyToken,
+        "messages": [
+            msg
+        ]
+    }
+
+    data = json.dumps(data)
+    resOR = requests.post(api,headers=headers,data=data)
+    
+    return 200
+
 ## ส่งเมื่อกด Send Work
-def ReplyReviewTask(msg, ChannelAccessToken):
+def ReplyReviewTask(msg,replyToken,ChannelAccessToken):
     api = 'https://api.line.me/v2/bot/message/push'
+    replyAPI = 'https://api.line.me/v2/bot/message/reply'
 
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
 
@@ -378,10 +336,11 @@ def ReplyReviewTask(msg, ChannelAccessToken):
     }
     #ส่งยืนยันการตามงาน
     sendToCMD = {
-        "to": msg["order_id"],
+        "replyToken": replyToken,
         "messages":[{
                 "type":"text",
-                "text":"ส่งงานเรียบร้อย รอการตรวจสอบ"
+                "text":"ส่งงาน {}\nเรียบร้อย\nรอการตรวจสอบ".format(msg['task']),
+                "quickReply": QuickReply()
             }
         ]
     }
@@ -389,12 +348,15 @@ def ReplyReviewTask(msg, ChannelAccessToken):
     bb = BubbleReviewTask(msg)
     sendToOR = {
         "to": msg["from_id"],
-        "messages": [bb]
+        "messages": [
+            bb
+        ]
     }
 
     msgToME = json.dumps(sendToCMD)
     msgToOR = json.dumps(sendToOR)
-    resME = requests.post(api,headers=headers,data=msgToME)
+
+    resME = requests.post(replyAPI,headers=headers,data=msgToME)
     resOR = requests.post(api,headers=headers,data=msgToOR)
     
     return 200
@@ -412,7 +374,9 @@ def ReplyTaskMessage(ReplyToken,ReplyMessage,ChannelAccessToken):
 
     data = {
         "replyToken": ReplyToken,
-        "messages": [ReplyMessage]
+        "messages": [
+            ReplyMessage
+        ]
     }
     data = json.dumps(data) ## Dump dict >> Json obj
     # print('data : ',data)
@@ -436,7 +400,8 @@ def ReplyAcceptRejectMessage(msg,status, ChannelAccessToken):
         "to": msg["from_id"],
         "messages":[{
                 "type":"text",
-                "text":"ตรวจงาน:"+msg["task"]+"\nสถานะ: "+status
+                "text":"ตรวจงาน: {}\nสถานะ: {}".format(msg["task"],status),
+                "quickReply": QuickReply()
             }
         ]
     }
@@ -445,7 +410,8 @@ def ReplyAcceptRejectMessage(msg,status, ChannelAccessToken):
         "to": msg["order_id"],
         "messages":[{
                 "type":"text",
-                "text":"คุณ:"+msg["order_by"]+"\nตรวจงาน: "+msg["task"]+"\nสถานะ: "+status
+                "text":"คุณ: {}\nตรวจงาน: {}\nสถานะ: {}".format(msg["order_by",msg["task"]],status),
+                "quickReply": QuickReply()
             }
         ]
     }
@@ -459,8 +425,8 @@ def ReplyAcceptRejectMessage(msg,status, ChannelAccessToken):
 
 
 ## ไม่สามารถทำรายการได้
-def ReplyErrorTransaction(userID,ChannelAccessToken):
-    api = 'https://api.line.me/v2/bot/message/push'
+def ReplyErrorTransaction(ReplyToken,ChannelAccessToken):
+    api = 'https://api.line.me/v2/bot/message/reply'
 
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
 
@@ -468,12 +434,13 @@ def ReplyErrorTransaction(userID,ChannelAccessToken):
         'Content-Type': 'application/json',
         'Authorization': Authorization
     }
-    #ส่งยืนยันการยอมรับงาน
+
     sendToCMD = {
-        "to": userID,
+        "replyToken": ReplyToken,
         "messages":[{
                 "type":"text",
-                "text":"ไม่สามารถทำรายการได้"
+                "text":"ไม่สามารถทำรายการได้",
+                "quickReply": QuickReply()
             }
         ]
     }
@@ -483,6 +450,43 @@ def ReplyErrorTransaction(userID,ChannelAccessToken):
 
     return 200
 
+# แจ้งเตือนผู้ถูกสั่งงานเมื่อมีการยกเลิกงาน
+def ReplyCancelTask(ReplyToken,ReplyMessage,task,ChannelAccessToken):
+    API = 'https://api.line.me/v2/bot/message/push'
+    REPLY = 'https://api.line.me/v2/bot/message/reply'
+
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+
+    headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': Authorization
+    }
+
+    responseFlex = {
+        "replyToken": ReplyToken,
+        "messages": [
+            ReplyMessage
+        ]
+    }
+
+    data = {
+        "to": task["order_id"],
+        "messages": [{
+            "type": "message",
+            "text": "คุณ {}\nทำการยกเลิกงาน\n{}\nของคุณ".format(task["order_by"],task["task"]),
+            "quickReply": QuickReply()
+        }]
+    }
+
+
+
+    data = json.dumps(data)
+    r = requests.post(API,headers=headers,data=data)
+
+    res = json.dumps(responseFlex)
+    resp = requests.post(REPLY,headers=headers,data=res)
+
+    return 200
 
 def NotifyTask(userID,message,ChannelAccessToken):
     api = 'https://api.line.me/v2/bot/message/push'
@@ -495,7 +499,10 @@ def NotifyTask(userID,message,ChannelAccessToken):
 
     data = {
         "to": userID,
-        "messages":[message]
+        "messages":[
+            message
+            
+        ]
     }
 
     data = json.dumps(data)

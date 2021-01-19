@@ -12,6 +12,7 @@ from bson.objectid import ObjectId
 
 collection = db["task"]
 
+# remove or cancel
 def RejectTaskInGroup(message,memberIds,userID):
     tagCount = message.count('@')
     count = 0
@@ -48,18 +49,17 @@ def RejectTaskInGroup(message,memberIds,userID):
 
     return task,user
 
-def RejectTask(message,memberIds,userID):
-    tagCount = message.count('@')
-    count = 0
-    task = message.split("#ยกเลิกงาน ")[1].split("@")[0]
-    userTag = (message.split("@")[1]).strip()
+
+# remove or cancel
+def RejectTask(id):
     user = []
-    taskQuery = {"task":task.strip(),"from_id":userID,"order_to":userTag}
-    setValue = { "$set": {"status":"Reject","done_at":datetime.now()}}
-    collection.update_many(taskQuery,setValue)
+    result = FindTaskByID(id)
+    taskQuery = {"_id":ObjectId(id)}
+    setValue = { "$set": {"status":"Reject"}}
+    collection.update_one(taskQuery,setValue)
     messageBack = {
                     "type": "text",
-                    "text": "@"+userTag,
+                    "text": "@"+result["order_to"],
                     "weight": "bold",
                     "size": "md",
                     "color": "#F93636FF",
@@ -69,30 +69,30 @@ def RejectTask(message,memberIds,userID):
     }
     user.append(messageBack)
 
-    return task,user
+    return user
 
-def ReviewTaskByID(message,userID):
-    taskID = message.split(" ")[1]
-    result = FindTaskByID(taskID)
-    taskQuery = {"_id":ObjectId(taskID),"order_id":userID}
+
+
+def ReviewTaskByID(taskId):
+    result = FindTaskByID(taskId)
+    taskQuery = {"_id":ObjectId(taskId)}
     setValue = { "$set": {"status":"Review"}}
     collection.update_one(taskQuery,setValue)
     
     return result
 
-def AcceptTaskByID(message,userID):
-    taskID = message.split(" ")[1]
-    result = FindTaskByID(taskID)
-    taskQuery = {"_id":ObjectId(taskID),"from_id":userID}
+def AcceptTaskByID(id):
+    result = FindTaskByID(id)
+    taskQuery = {"_id":ObjectId(id)}
     setValue = { "$set": {"status":"Done","done_at":datetime.now()}}
     collection.update_one(taskQuery,setValue)
     
     return result
 
-def RejectTaskByID(message):
-    taskID = message.split(" ")[1]
-    result = FindTaskByID(taskID)
-    taskQuery = {"_id":ObjectId(taskID)}
+#Reject status to In Progress
+def RejectTaskByID(id):
+    result = FindTaskByID(id)
+    taskQuery = {"_id":ObjectId(id)}
     setValue = { "$set": {"status":"In Progress"}}
     collection.update_one(taskQuery,setValue)
     

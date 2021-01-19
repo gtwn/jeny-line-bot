@@ -613,7 +613,7 @@ def FlexRejectTask(task,user):
                                         "contents": [
                                         {
                                             "type": "text",
-                                            "text": task,
+                                            "text": task["task"],
                                             "weight": "bold",
                                             "size": "xl",
                                             "color": "#FFB75E",
@@ -653,7 +653,7 @@ def FlexRejectTask(task,user):
 
     return message
 
-
+## แสดงงานภายในวันนี้
 def FlexTaskToday(task):
     if not task:
         message = {
@@ -951,7 +951,7 @@ def FlexFollowTaskReject(task):
         }
     return message
 
-
+## ประวัติงาน
 def HistoryTask(task):
 
     if not task:
@@ -1360,7 +1360,7 @@ def FlexTaskList(task):
                 "direction": "ltr",
                 "hero": {
                     "type": "image",
-                    "url": "https://sv1.picz.in.th/images/2021/01/11/lZ4Ttn.jpg",
+                    "url": "https://sv1.picz.in.th/images/2021/01/11/lZ43IS.jpg",
                     "margin": "none",
                     "size": "full",
                     "aspectRatio": "16:5",
@@ -1504,9 +1504,10 @@ def BubbleFollow(task):
                 {
                     "type": "button",
                     "action": {
-                    "type": "message",
-                    "label": "Send Work",
-                    "text": "#Send "+str(task["_id"])+" "+task["task"]
+                        "type": "postback",
+                        "label": "Send Work",
+                        "text": "ยืนยันการส่งงาน\n{}\nเรียบร้อย".format(task["task"]),
+                        "data": "action=send&id={}".format(str(task["_id"]))
                     },
                     "color": "#FF9B00FF",
                     "style": "primary"
@@ -1518,8 +1519,9 @@ def BubbleFollow(task):
 
     return message
 
-
+## ข้อมูลก่อนกดส่งงาน
 def BubbleInfoTask(task):
+
     deadline = datetime.strftime(task["deadline"],"%d %b, %Y")
 
     message = {
@@ -1588,9 +1590,10 @@ def BubbleInfoTask(task):
                 {
                     "type": "button",
                     "action": {
-                    "type": "message",
-                    "label": "Send Work",
-                    "text": "#Send "+str(task["_id"])+" "+task["task"]
+                        "type": "postback",
+                        "label": "Send Work",
+                        "text": "ยืนยันการส่งงาน\n{}\เรียบร้อยแล้ว".format(task["task"]),
+                        "data": "action=send&id={}".format(str(task["_id"]))
                     },
                     "color": "#FF9B00FF",
                     "style": "primary"
@@ -1602,6 +1605,96 @@ def BubbleInfoTask(task):
 
     return message
 
+
+# ข้อมุลก่อนยกเลิกงาน
+def BubbleInfoBeforeCancel(task):
+    deadline = datetime.strftime(task["deadline"],"%d %b, %Y")
+
+    message = {
+        "type": "flex",
+        "altText": "ข้อมูลก่อนส่งงาน",
+        "contents": {
+            "type": "bubble",
+            "size": "kilo",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                {
+                    "type": "text",
+                    "text": "ยืนยันการยกเลิกงาน",
+                    "weight": "bold",
+                    "size": "xl",
+                    "wrap": True,
+                    "contents": []
+                },
+                {
+                    "type": "box",
+                    "layout": "baseline",
+                    "flex": 1,
+                    "margin": "md",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": task["task"],
+                        "weight": "bold",
+                        "size": "xl",
+                        "flex": 0,
+                        "wrap": True,
+                        "contents": []
+                    }
+                    ]
+                },
+                {
+                    "type": "text",
+                    "text": "กำหนดส่ง: {}".format(deadline),
+                    "size": "sm",
+                    "color": "#FF5551",
+                    "flex": 0,
+                    "margin": "md",
+                    "wrap": True,
+                    "contents": []
+                },
+                {
+                    "type": "text",
+                    "text": "ผู้รับผิดชอบ: {}".format(task["order_to"]),
+                    "size": "sm",
+                    "color": "#FF5551",
+                    "flex": 0,
+                    "margin": "md",
+                    "wrap": True,
+                    "contents": []
+                }
+                ]
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                {
+                    "type": "button",
+                    "action": {
+                        "type": "postback",
+                        "label": "Delete Work",
+                        "text": "ยืนยันการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(task["task"],task["order_to"]),
+                        "data": "action=remove&id={}".format(str(task["_id"]))
+                    },
+                    "color": "#F04E4EFF",
+                    "style": "primary"
+                }
+                ]
+            }
+        }
+    }
+
+
+
+    return message
+
+
+## แสดง Accept Reject ตรวจงาน
 def BubbleReviewTask(task):
     message = {
         "type": "flex",
@@ -1648,9 +1741,10 @@ def BubbleReviewTask(task):
                     {
                         "type": "button",
                         "action": {
-                        "type": "message",
-                        "label": "Reject",
-                        "text": "#Reject "+str(task["_id"])+" "+task["task"]
+                            "type": "message",
+                            "label": "Reject",
+                            "text": "ตรวจสอบการส่งงาน {}".format(task["task"]),
+                            'data': "action=reject&id={}".format(task["_id"])
                         },
                         "color": "#C93131FF",
                         "height": "md",
@@ -1659,9 +1753,10 @@ def BubbleReviewTask(task):
                     {
                         "type": "button",
                         "action": {
-                        "type": "message",
-                        "label": "Accept",
-                        "text": "#Accept "+str(task["_id"])+" "+task["task"]
+                            "type": "message",
+                            "label": "Accept",
+                            "text": "ตรวจสอบการส่งงาน {}".format(task["task"]),
+                            'data': "action=accept&id={}".format(task["_id"])
                         },
                         "height": "md",
                         "style": "primary"
@@ -1677,7 +1772,7 @@ def BubbleReviewTask(task):
 
 
 
-
+## เมนูแนะนำคำสั่ง BOT
 def Menu():
     message = {
     "type": "template",
@@ -1736,4 +1831,96 @@ def Menu():
         }
     }
 
+    return message
+
+
+def QuickReply():
+
+    message = {
+            "items":[
+                {
+                    "type":"action",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbUsKf.png",
+                    "action": {
+                        "type":"message",
+                        "label":"คำสั่งแนะนำ",
+                        "text":"#คำสั่งแนะนำ"
+                    }
+                },
+                {
+                    "type":"action",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqMGz.png",
+                    "action": {
+                        "type":"message",
+                        "label":"งานที่สั่ง",
+                        "text":"#งานที่สั่ง"
+                    }
+                },
+                {
+                    "type":"action",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqaB1.png",
+                    "action": {
+                        "type":"message",
+                        "label":"งานที่ต้องทำ",
+                        "text":"#งานที่ต้องทำ"
+                    }
+                },
+                {
+                    "type":"action",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqIlq.png",
+                    "action": {
+                        "type":"message",
+                        "label":"ตามงาน",
+                        "text":"#ตามงาน"
+                    }
+                },
+                {
+                    "type":"action",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5IMQ.png",
+                    "action": {
+                        "type":"message",
+                        "label":"ส่งงาน",
+                        "text":"#ส่งงาน"
+                    }
+                },
+                {
+                    "type":"action",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb50qR.png",
+                    "action": {
+                        "type":"message",
+                        "label":"ยกเลิกงาน",
+                        "text":"#ยกเลิก"
+                    }
+                },
+                {
+                    "type":"action",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5pJe.png",
+                    "action": {
+                        "type":"message",
+                        "label":"ประวัติงาน",
+                        "text":"#ประวัติงาน"
+                    }
+                },
+                {
+                    "type":"action",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5dB8.png",
+                    "action": {
+                        "type":"message",
+                        "label":"ตรวจสอบงานผ่านเว็บไซต์",
+                        "text":"เว็ป"
+                    }
+                },
+                {
+                    "type":"action",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5dB8.png",
+                    "action": {
+                        "type":"postback",
+                        "label":"Postback",
+                        "text":"Post Back message",
+                        "data":"action=reject&id=1234"
+                    }
+                }
+            ]
+        }
+    
     return message
