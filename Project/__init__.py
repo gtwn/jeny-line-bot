@@ -32,9 +32,7 @@ def webhook():
             ReplyHelloMessage(replyToken,replyMsg,Channel_Access_Token)
         elif eventsType == 'postback':  ## ส่ง action การทำรายการ
             data = payload['events'][0]['postback']['data']
-            print(data)
             userID = payload['events'][0]["source"]["userId"]
-            print("userID",userID)
             r = requests.post('https://099b8ad14268.ngrok.io/action?{}&replyToken={}&userID={}'.format(data,replyToken,userID))
         elif eventsType == 'message':
             message = ((payload['events'][0]['message']['text']).replace('\u200b','')).strip()
@@ -75,24 +73,12 @@ def webhook():
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
             elif '#งานที่สั่ง' in message :
                 profile = GetUserProfile(userID,Channel_Access_Token)
-                print('groupID:',groupID)
                 if groupID == '':
                     task = FindFollowTask(userID)
                 else:
                     task = FindFollowTaskInGroup(userID,groupID)
                 # print('return task:',task)
                 reply = FlexFollowTask(task)
-                ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
-            elif '#ยกเลิกงาน' in message:
-                profile = GetUserProfile(userID,Channel_Access_Token)
-                memberIds = GetMemberUserIDs(groupID,Channel_Access_Token)
-                listIDs = ast.literal_eval(memberIds) ## แปลง string  เป็น list <class dict>
-                if groupID == '':
-                    task,user = RejectTask(message,listIDs,userID)
-                else:
-                    task,user = RejectTaskInGroup(message,listIDs,userID)
-
-                reply = FlexRejectTask(task,user)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
             elif '#ยกเลิก' in message:
                 profile = GetUserProfile(userID,Channel_Access_Token)
