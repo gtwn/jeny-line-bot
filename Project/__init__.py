@@ -1,4 +1,5 @@
 from flask import Flask ,  request, abort
+from flask_cors import CORS
 from Project.Line.lineAPI import *
 from Project.Line.flex import *
 import requests
@@ -13,6 +14,7 @@ from Project.db.UpdateFunction import *
 import ast
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def hello():
@@ -198,3 +200,27 @@ def action():
         ReplyErrorTransaction(replyToken,Channel_Access_Token)
 
     return request.query_string,200
+
+
+
+@app.route('/assign/task', methods=['POST'])
+def assignTask():
+    groupId = request.headers.get('groupId')
+    userOrder = request.headers.get('userId')
+    payload = request.json
+    print(payload)
+    subject = payload.get('subject')
+    userList = payload.get('order_to')
+    deadline = payload.get('deadline')
+    deadline_obj = datetime.strptime(deadline,"%Y-%m-%dT%H:%M:%S.%fZ")
+    typeWork = payload.get('type')
+    detail = payload.get('detail')
+    # print(type(deadline))
+    # print(str(date_time_obj.day), str(date_time_obj.month), str(date_time_obj.year))
+    if subject == "" and userList == [] and detail == "" and typeWork == "" and deadline == "" :
+        return 'Failed', 304
+    else :
+        flexOrder = InsertNewTask(userList, subject, detail, typeWork, deadline_obj, userOrder, groupId)
+        print(flexOrder)
+  
+    return 'Success',201

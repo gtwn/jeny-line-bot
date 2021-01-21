@@ -39,3 +39,5 @@ exit : deactivate
 
 
 pip3 freeze > requirements.txt
+
+pip install -U flask-cors

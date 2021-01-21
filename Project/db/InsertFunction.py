@@ -4,8 +4,12 @@ from pymongo import MongoClient
 from Project.db.ConfigDB import *
 from Project.Line.lineAPI import *
 import pytz
+import uuid
+
 
 collection = db["task"]
+
+tasklistDB = db["tasklist"]
 
 ## เพิ่มงาน
 def InsertTask(message,userProfile,userID,groupID,memberIds):
@@ -64,3 +68,79 @@ def InsertTask(message,userProfile,userID,groupID,memberIds):
                 break
 
     return order,task,by,userIds
+
+
+
+def InsertNewTask(userList, subject, detail, typeWork, deadline, userOrderId, groupId):
+    order = []
+    userProfile = GetUserProfile(userOrderId,Channel_Access_Token)
+    if typeWork == "group":
+        subId = uuid.uuid4().hex
+
+        for uid in userList:
+            display = GetUserProfile(uid,Channel_Access_Token)
+            data = {
+                "sub_id":   subId,
+                "order_to": display,
+                "task":     subject.strip(),
+                "detail":   detail,
+                "deadline": deadline,
+                "created_at":datetime.now(),
+                "done_at":  datetime.min,
+                "order_by": userProfile,
+                "from_id":  userOrderId,
+                "order_id": uid,
+                "group_id": groupId,
+                "type":     typeWork,
+                "status":   "In Progress"
+            }
+            tasklistDB.insert_one(data)
+
+            name = {
+                        "type": "text",
+                        "text": '@'+display,
+                        "weight": "bold",
+                        "size": "md",
+                        "color": "#F93636FF",
+                        "align": "start",
+                        "margin": "sm",
+                        "wrap": True,
+                        "contents": []
+                }
+            order.append(name)
+    else:
+
+        for uid in userList:
+            subId = uuid.uuid4().hex
+            display = GetUserProfile(uid,Channel_Access_Token)
+            data = {
+                "sub_id":   subId,
+                "order_to": display,
+                "task":     subject.strip(),
+                "detail":   detail,
+                "deadline": deadline,
+                "created_at":datetime.now(),
+                "done_at":  datetime.min,
+                "order_by": userProfile,
+                "from_id":  userOrderId,
+                "order_id": uid,
+                "group_id": groupId,
+                "type":     typeWork,
+                "status":   "In Progress"
+            }
+            tasklistDB.insert_one(data)
+
+            name = {
+                        "type": "text",
+                        "text": '@'+display,
+                        "weight": "bold",
+                        "size": "md",
+                        "color": "#F93636FF",
+                        "align": "start",
+                        "margin": "sm",
+                        "wrap": True,
+                        "contents": []
+                }
+            order.append(name)
+
+    return order
