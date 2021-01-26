@@ -1770,6 +1770,60 @@ def BubbleReviewTask(task):
 
     return message
 
+def FlexAssignTask(profile,userId,groupId):
+
+    message = {
+        "type": "flex",
+        "altText": "เริ่มการสั่งงาน",
+        "contents": {
+            "type": "bubble",
+            "size": "kilo",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                {
+                    "type": "text",
+                    "text": "เริ่มต้นการสั่งงาน",
+                    "weight": "bold",
+                    "size": "xl",
+                    "wrap": True,
+                    "contents": []
+                },
+                {
+                    "type": "text",
+                    "text": "ผู้สั่งงาน: "+profile,
+                    "size": "sm",
+                    "color": "#FF5551",
+                    "flex": 0,
+                    "margin": "md",
+                    "wrap": True,
+                    "contents": []
+                }
+                ]
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "sm",
+                "contents": [
+                {
+                    "type": "button",
+                    "action": {
+                        "type": "uri",
+                        "label": "สั่งงาน",
+                        "uri": "https://liff.line.me/1654805076-Qbl9zloL/?gid={}&uid={}".format(groupId,userId)
+                    },
+                    "color": "#FF9B00FF",
+                    "style": "primary"
+                }
+                ]
+            }
+            }
+    }
+
+    return message
 
 
 ## เมนูแนะนำคำสั่ง BOT

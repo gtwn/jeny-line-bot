@@ -143,4 +143,4 @@ def InsertNewTask(userList, subject, detail, typeWork, deadline, userOrderId, gr
                 }
             order.append(name)
 
-    return order
+    return order,userProfile

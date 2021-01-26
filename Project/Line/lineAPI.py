@@ -45,9 +45,10 @@ def ReplyQuickMessageSayJeny(ReplyToken,GroupID,ChannelAccessToken):
                             "type":"action",
                             "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbEczR.png",
                             "action": {
-                                "type":"message",
+                                "type":"postback",
                                 "label":"สั่งงาน",
-                                "text":"สั่งงาน"
+                                "text": "สั่งงาน",
+                                "data": "action=assign&groupId={}".format(GroupID)
                             }
                         },
                         {
@@ -103,6 +104,45 @@ def ReplyQuickMessageSayJeny(ReplyToken,GroupID,ChannelAccessToken):
 
     r = requests.post(api,headers=headers,data=data)
 
+    return 200
+
+def ReplyNewTask(GroupId, FlexMessage,UserIDs, ChannelAccessToken):
+    LINE_API_MultiCast = 'https://api.line.me/v2/bot/message/multicast'
+    LINE_API_Push = 'https://api.line.me/v2/bot/message/push'
+    Authorization = 'Bearer {}'.format(ChannelAccessToken)
+    
+    headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': Authorization
+    }
+
+    data = {
+        "to": GroupId,
+        "messages":[FlexMessage]
+    }
+    data = json.dumps(data) ## Dump dict >> Json obj
+    # print('data : ',data)
+    if len(UserIDs) == 1 :
+        LINE_API_Reply = LINE_API_Push
+        ID = UserIDs[0]
+        
+    else:
+        LINE_API_Reply = LINE_API_MultiCast
+        ID = UserIDs
+    mymessage = {
+            "to": ID,
+            "messages": [ {
+                "type":"text",
+                "text":"มีการสั่งงานเข้ามาใหม่\nกรุณาตรวจสอบงานด้วยค่ะ",
+                "quickReply": QuickReply()
+            }
+            ]
+    }
+
+    mymessage = json.dumps(mymessage)
+    resp1 = requests.post(LINE_API_Push,headers=headers,data=data)
+    resp2 = requests.post(LINE_API_Reply,headers=headers,data=mymessage)
+    
     return 200
 
 

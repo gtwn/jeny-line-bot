@@ -35,7 +35,7 @@ def webhook():
         elif eventsType == 'postback':  ## ส่ง action การทำรายการ
             data = payload['events'][0]['postback']['data']
             userID = payload['events'][0]["source"]["userId"]
-            r = requests.post('https://099b8ad14268.ngrok.io/action?{}&replyToken={}&userID={}'.format(data,replyToken,userID))
+            r = requests.post('https://jeny-bot.herokuapp.com/action?{}&replyToken={}&userID={}'.format(data,replyToken,userID))
         elif eventsType == 'message':
             message = ((payload['events'][0]['message']['text']).replace('\u200b','')).strip()
             sourceType = payload['events'][0]['source']['type']
@@ -58,7 +58,6 @@ def webhook():
                     ReplyRejectMessage(replyToken,Channel_Access_Token)
                 else:
                     replyMessage = FlexDetailTask(task,deadline,orderTo,profile)
-                    # replyMessage = '*รายละเอียดการสั่งงาน*\nสั่งงานคุณ: `@{}`\nรายละเอียดงาน: {}\nกำหนดส่ง: {}\nสั่งโดย: `@{}`'.format(orderTo,task,by,profile)
                     ReplyMessage(replyToken,replyMessage,Channel_Access_Token,orderIds)
             elif '#คำสั่งแนะนำ' in message:
                 # replyMsg = '*คำสั่งแนะนำ*\n*ต้องการสั่งงาน*:\n`Jeny #Order @... #Task .... #By date/month`\n*ต้องการดูงานที่ต้องทำ*: `#งานที่ต้องทำ`\n*ต้องการดูงานที่สั่ง*: `#งานที่สั่ง`'
@@ -106,17 +105,7 @@ def webhook():
                     task = ListTaskForSend(userID)
                     reply = FlexTaskList(task)
                     ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
-            # else:
-            #     if groupID == '':
-            #         replyMsg = FlexRmd()
-            #         ReplyHelloMessage(replyToken,replyMsg,Channel_Access_Token)
-            #     elif ('#ยก' or '#งาน' or '#สั่ง') in message:
-            #         replyMsg = FlexRmd()
-            #         ReplyRmdMessage(replyToken,replyMsg,Channel_Access_Token)
-
-
-        # else :
-        #     ReplyTaskMessage(replyToken,'คำสั่งแนะนำ\n ต้องการสั่งงาน:\n Jeny #Order @... #Task .... #By date/month\n ต้องการดูงานที่ต้องทำ: #งานที่ต้องทำ\n',Channel_Access_Token)
+           
         return request.json,200
         
     elif request.method == 'GET' :
@@ -139,6 +128,7 @@ def action():
     print('query:',request.query_string)
     action = request.args.get('action')
     id = request.args.get('id')
+    groupID = request.args.get('groupId')
     userID = request.args.get('userID')
     replyToken = request.args.get('replyToken')
     
@@ -195,7 +185,10 @@ def action():
             user = RejectTask(id)
             reply = FlexRejectTask(result,user)
             ReplyCancelTask(replyToken,reply,result,Channel_Access_Token)
-        
+    elif action == "assign":
+        profile = GetUserProfile(userID, Channel_Access_Token)
+        replyMessage = FlexAssignTask(profile,userID,groupID)
+        ReplyTaskMessage(replyToken, replyMessage, Channel_Access_Token)
     else :
         ReplyErrorTransaction(replyToken,Channel_Access_Token)
 
@@ -215,12 +208,16 @@ def assignTask():
     deadline_obj = datetime.strptime(deadline,"%Y-%m-%dT%H:%M:%S.%fZ")
     typeWork = payload.get('type')
     detail = payload.get('detail')
+    deadline_str = "{}/{}/{}".format(str(deadline_obj.day), str(deadline_obj.month), str(deadline_obj.year))
     # print(type(deadline))
     # print(str(date_time_obj.day), str(date_time_obj.month), str(date_time_obj.year))
     if subject == "" and userList == [] and detail == "" and typeWork == "" and deadline == "" :
         return 'Failed', 304
     else :
-        flexOrder = InsertNewTask(userList, subject, detail, typeWork, deadline_obj, userOrder, groupId)
-        print(flexOrder)
-  
+        flexOrder, userProfile = InsertNewTask(userList, subject, detail, typeWork, deadline_obj, userOrder, groupId)
+        replyMessage = FlexDetailTask(subject, deadline_str, flexOrder, userProfile)
+        ReplyNewTask(groupId, replyMessage, userList, Channel_Access_Token)
+
     return 'Success',201
+  
+    

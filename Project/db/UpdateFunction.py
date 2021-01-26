@@ -10,7 +10,7 @@ from Project.db.FindFunction import *
 from bson.objectid import ObjectId
 
 
-collection = db["task"]
+collection = db["tasklist"]
 
 # remove or cancel
 def RejectTaskInGroup(message,memberIds,userID):
