@@ -374,7 +374,7 @@ def ReplyReviewTask(msg,replyToken,ChannelAccessToken):
         'Content-Type': 'application/json',
         'Authorization': Authorization
     }
-    #ส่งยืนยันการตามงาน
+    #ส่งยืนยันการส่งงาน
     sendToCMD = {
         "replyToken": replyToken,
         "messages":[{
@@ -428,7 +428,8 @@ def ReplyTaskMessage(ReplyToken,ReplyMessage,ChannelAccessToken):
 ## ยืนยันการส่งงาน
 def ReplyAcceptRejectMessage(msg,status, ChannelAccessToken):
     api = 'https://api.line.me/v2/bot/message/push'
-
+    multiple = 'https://api.line.me/v2/bot/message/multicast'
+    setAPI = ''
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
 
     headers = {
@@ -446,20 +447,33 @@ def ReplyAcceptRejectMessage(msg,status, ChannelAccessToken):
         ]
     }
     #ส่งยืนยันการตรวจสอบงานให้ผู้ถูกสั่งงาน
-    sendToOR = {
-        "to": msg["order_id"],
-        "messages":[{
-                "type":"text",
-                "text":"คุณ: {}\nตรวจงาน: {}\nสถานะ: {}".format(msg["order_by",msg["task"]],status),
-                "quickReply": QuickReply()
-            }
-        ]
-    }
+    if msg["type"] == "group": 
+        setAPI = multiple
+        sendToOR = {
+            "to": msg["member_id"],
+            "messages":[{
+                    "type":"text",
+                    "text":"คุณ: {}\nตรวจงาน: {}\nสถานะ: {}".format(msg["order_by"],msg["task"],status),
+                    "quickReply": QuickReply()
+                }
+            ]
+        }
+    else:
+        setAPI = api
+        sendToOR = {
+            "to": msg["order_id"],
+            "messages":[{
+                    "type":"text",
+                    "text":"คุณ: {}\nตรวจงาน: {}\nสถานะ: {}".format(msg["order_by"],msg["task"],status),
+                    "quickReply": QuickReply()
+                }
+            ]
+        }
 
-    msgToME = json.dumps(sendToCMD)
     msgToOR = json.dumps(sendToOR)
+    msgToME = json.dumps(sendToCMD)
     resME = requests.post(api,headers=headers,data=msgToME)
-    resOR = requests.post(api,headers=headers,data=msgToOR)
+    resOR = requests.post(setAPI,headers=headers,data=msgToOR)
     
     return 200
 
@@ -494,6 +508,7 @@ def ReplyErrorTransaction(ReplyToken,ChannelAccessToken):
 def ReplyCancelTask(ReplyToken,ReplyMessage,task,ChannelAccessToken):
     API = 'https://api.line.me/v2/bot/message/push'
     REPLY = 'https://api.line.me/v2/bot/message/reply'
+    Multiple = 'https://api.line.me/v2/bot/message/multicast'
 
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
 
@@ -509,19 +524,28 @@ def ReplyCancelTask(ReplyToken,ReplyMessage,task,ChannelAccessToken):
         ]
     }
 
-    data = {
-        "to": task["order_id"],
-        "messages": [{
-            "type": "message",
-            "text": "คุณ {}\nทำการยกเลิกงาน\n{}\nของคุณ".format(task["order_by"],task["task"]),
-            "quickReply": QuickReply()
-        }]
-    }
-
-
-
-    data = json.dumps(data)
-    r = requests.post(API,headers=headers,data=data)
+    if task["type"] == "group":
+        data = {
+            "to": task["member_id"],
+            "messages": [{
+                "type": "message",
+                "text": "คุณ {}\nทำการยกเลิกงาน\n{}\nของคุณ".format(task["order_by"],task["task"]),
+                "quickReply": QuickReply()
+            }]
+        }
+        data = json.dumps(data)
+        r = requests.post(Multiple,headers=headers,data=data)
+    else:
+        data = {
+            "to": task["order_id"],
+            "messages": [{
+                "type": "message",
+                "text": "คุณ {}\nทำการยกเลิกงาน\n{}\nของคุณ".format(task["order_by"],task["task"]),
+                "quickReply": QuickReply()
+            }]
+        }
+        data = json.dumps(data)
+        r = requests.post(API,headers=headers,data=data)
 
     res = json.dumps(responseFlex)
     resp = requests.post(REPLY,headers=headers,data=res)

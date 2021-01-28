@@ -47,25 +47,24 @@ def webhook():
                 groupID = ''
             if message == 'Jeny':
                 ReplyQuickMessageSayJeny(replyToken,groupID,Channel_Access_Token) 
-            elif '#สั่งงาน' in message:     # #สั่งงาน @name #งาน รายละเอียดงาน #ส่ง วัน/เดือน
-                profile = GetUserProfile(userID,Channel_Access_Token)
-                print('groupid:',groupID)
-                memberIds = GetMemberUserIDs(groupID,Channel_Access_Token)
-                listIDs = ast.literal_eval(memberIds) ## แปลง string  เป็น list <class dict>
-                print(listIDs)
-                orderTo,task,deadline,orderIds = InsertTask(message,profile,userID,groupID,listIDs)
-                if not orderTo:
-                    ReplyRejectMessage(replyToken,Channel_Access_Token)
-                else:
-                    replyMessage = FlexDetailTask(task,deadline,orderTo,profile)
-                    ReplyMessage(replyToken,replyMessage,Channel_Access_Token,orderIds)
+            # elif '#สั่งงาน' in message:     # #สั่งงาน @name #งาน รายละเอียดงาน #ส่ง วัน/เดือน
+            #     profile = GetUserProfile(userID,Channel_Access_Token)
+            #     print('groupid:',groupID)
+            #     memberIds = GetMemberUserIDs(groupID,Channel_Access_Token)
+            #     listIDs = ast.literal_eval(memberIds) ## แปลง string  เป็น list <class dict>
+            #     print(listIDs)
+            #     orderTo,task,deadline,orderIds = InsertTask(message,profile,userID,groupID,listIDs)
+            #     if not orderTo:
+            #         ReplyRejectMessage(replyToken,Channel_Access_Token)
+            #     else:
+            #         replyMessage = FlexDetailTask(task,deadline,orderTo,profile)
+            #         ReplyMessage(replyToken,replyMessage,Channel_Access_Token,orderIds)
             elif '#คำสั่งแนะนำ' in message:
                 # replyMsg = '*คำสั่งแนะนำ*\n*ต้องการสั่งงาน*:\n`Jeny #Order @... #Task .... #By date/month`\n*ต้องการดูงานที่ต้องทำ*: `#งานที่ต้องทำ`\n*ต้องการดูงานที่สั่ง*: `#งานที่สั่ง`'
                 replyMsg = FlexRmd()
                 ReplyRmdMessage(replyToken,replyMsg,Channel_Access_Token)
                 # PushMessage(Channel_Access_Token)
             elif '#งานที่ต้องทำ' in message :
-                profile = GetUserProfile(userID,Channel_Access_Token)
                 if groupID == '':
                     task = FindTask(userID)
                 else:
@@ -73,7 +72,6 @@ def webhook():
                 reply = FlexMyTask(task)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
             elif '#งานที่สั่ง' in message :
-                profile = GetUserProfile(userID,Channel_Access_Token)
                 if groupID == '':
                     task = FindFollowTask(userID)
                 else:
@@ -82,7 +80,6 @@ def webhook():
                 reply = FlexFollowTask(task)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
             elif '#ยกเลิก' in message:
-                profile = GetUserProfile(userID,Channel_Access_Token)
                 if groupID == '':
                     task = RejectFollowTask(userID)
                 else:
@@ -90,8 +87,6 @@ def webhook():
                 reply = FlexFollowTaskReject(task)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
             elif '#ประวัติงาน' in message:
-                profile = GetUserProfile(userID,Channel_Access_Token)
-
                 task = FindHistory(userID,groupID)
                 reply = HistoryTask(task)
                 ReplyTaskMessage(replyToken,reply,Channel_Access_Token)
@@ -144,9 +139,9 @@ def action():
             ReplyErrorTransaction(replyToken,Channel_Access_Token)
         else:
             ReplyInfoTask(replyToken,result,Channel_Access_Token)
-    elif action == 'send':
+    elif action == 'send':      ## ส่ง review งาน
         result = FindTaskByID(id)
-        if result["status"] != 'In Progress':
+        if result["status"] != 'In Progress' or result["order_id"] != userID:
             ReplyErrorTransaction(replyToken,Channel_Access_Token)
         else:
             result = ReviewTaskByID(id)
@@ -175,9 +170,6 @@ def action():
             message = BubbleInfoBeforeCancel(result)
             ReplyInfoCancelTask(replyToken,message,Channel_Access_Token)
     elif action == 'remove':
-        # profile = GetUserProfile(userID,Channel_Access_Token)
-        # memberIds = GetMemberUserIDs(groupID,Channel_Access_Token)
-        # listIDs = ast.literal_eval(memberIds) ## แปลง string  เป็น list <class dict>
         result = FindTaskByID(id)
         if result["status"] != "In Progress" or result["from_id"] != userID:
             ReplyErrorTransaction(replyToken,Channel_Access_Token)
@@ -185,10 +177,32 @@ def action():
             user = RejectTask(id)
             reply = FlexRejectTask(result,user)
             ReplyCancelTask(replyToken,reply,result,Channel_Access_Token)
-    elif action == "assign":
+    elif action == "assign":        ## แสดง flex สำหรับสั่งงาน
         profile = GetUserProfile(userID, Channel_Access_Token)
         replyMessage = FlexAssignTask(profile,userID,groupID)
         ReplyTaskMessage(replyToken, replyMessage, Channel_Access_Token)
+    elif action == "information":       ## รายละเอียดงานที่ต้องทำ
+        result = FindTaskByID(id)
+        if result["order_id"] != userID:
+            ReplyErrorTransaction(replyToken,Channel_Access_Token)
+        else:
+            reply = FlexInformation(result)
+            ReplyTaskMessage(replyToken, reply, Channel_Access_Token)
+    elif action == "followinfo":        ## รายละเอียดงานที่สั่ง
+        result = FindTaskByID(id)
+        if result["from_id"] != userID:
+            ReplyErrorTransaction(replyToken,Channel_Access_Token)
+        else:
+            reply = FlexInformation(result)
+            ReplyTaskMessage(replyToken, reply, Channel_Access_Token)
+    elif action == "check":         ## แสดงรายการงานรอตรวจ
+        reply = FindReviewTask(userID)
+        flexReply = FlexReviewTask(reply)
+        ReplyTaskMessage(replyToken, flexReply, Channel_Access_Token)
+    elif action == "ifcheck":     ## ตรวจงาน
+        result = FindTaskByID(id)
+        messageBack = BubbleAcceptRejectTask(result)
+        ReplyTaskMessage(replyToken, messageBack, Channel_Access_Token)
     else :
         ReplyErrorTransaction(replyToken,Channel_Access_Token)
 
@@ -205,6 +219,7 @@ def assignTask():
     subject = payload.get('subject')
     userList = payload.get('order_to')
     deadline = payload.get('deadline')
+    member = payload.get('member')
     deadline_obj = datetime.strptime(deadline,"%Y-%m-%dT%H:%M:%S.%fZ")
     typeWork = payload.get('type')
     detail = payload.get('detail')
@@ -214,7 +229,7 @@ def assignTask():
     if subject == "" and userList == [] and detail == "" and typeWork == "" and deadline == "" :
         return 'Failed', 304
     else :
-        flexOrder, userProfile = InsertNewTask(userList, subject, detail, typeWork, deadline_obj, userOrder, groupId)
+        flexOrder, userProfile = InsertNewTask(userList,member, subject, detail, typeWork, deadline_obj, userOrder, groupId)
         replyMessage = FlexDetailTask(subject, deadline_str, flexOrder, userProfile)
         ReplyNewTask(groupId, replyMessage, userList, Channel_Access_Token)
 
