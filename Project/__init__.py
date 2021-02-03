@@ -30,8 +30,6 @@ def webhook():
         eventsType = payload['events'][0]['type']
 
         if eventsType == 'join' or eventsType == 'follow':
-            # replyMsg = FlexRmd()
-            # ReplyHelloMessage(replyToken,replyMsg,Channel_Access_Token)
             replyMsg = FlexRmd()
             ReplyRmdMessage(replyToken,replyMsg,Channel_Access_Token)
         elif eventsType == 'postback':  ## ส่ง action การทำรายการ
@@ -47,25 +45,11 @@ def webhook():
                 groupID = payload['events'][0]['source']['groupId']
             else:
                 groupID = ''
-            if message == 'Jeny':
+            if message.lower() == 'jeny':
                 ReplyQuickMessageSayJeny(replyToken,groupID,Channel_Access_Token) 
-            # elif '#สั่งงาน' in message:     # #สั่งงาน @name #งาน รายละเอียดงาน #ส่ง วัน/เดือน
-            #     profile = GetUserProfile(userID,Channel_Access_Token)
-            #     print('groupid:',groupID)
-            #     memberIds = GetMemberUserIDs(groupID,Channel_Access_Token)
-            #     listIDs = ast.literal_eval(memberIds) ## แปลง string  เป็น list <class dict>
-            #     print(listIDs)
-            #     orderTo,task,deadline,orderIds = InsertTask(message,profile,userID,groupID,listIDs)
-            #     if not orderTo:
-            #         ReplyRejectMessage(replyToken,Channel_Access_Token)
-            #     else:
-            #         replyMessage = FlexDetailTask(task,deadline,orderTo,profile)
-            #         ReplyMessage(replyToken,replyMessage,Channel_Access_Token,orderIds)
             elif '#คำสั่งแนะนำ' in message:
-                # replyMsg = '*คำสั่งแนะนำ*\n*ต้องการสั่งงาน*:\n`Jeny #Order @... #Task .... #By date/month`\n*ต้องการดูงานที่ต้องทำ*: `#งานที่ต้องทำ`\n*ต้องการดูงานที่สั่ง*: `#งานที่สั่ง`'
                 replyMsg = FlexRmd()
                 ReplyRmdMessage(replyToken,replyMsg,Channel_Access_Token)
-                # PushMessage(Channel_Access_Token)
             elif '#งานที่ต้องทำ' in message :
                 if groupID == '':
                     task = FindTask(userID)
@@ -143,7 +127,7 @@ def action():
             ReplyInfoTask(replyToken,result,Channel_Access_Token)
     elif action == 'send':      ## ส่ง review งาน
         result = FindTaskByID(id)
-        if result["status"] != 'In Progress' or result["order_id"] != userID:
+        if result["status"] != 'In Progress' or userID not in result["member_id"]:
             ReplyErrorTransaction(replyToken,Channel_Access_Token)
         else:
             result = ReviewTaskByID(id)
@@ -185,7 +169,7 @@ def action():
         ReplyTaskMessage(replyToken, replyMessage, Channel_Access_Token)
     elif action == "information":       ## รายละเอียดงานที่ต้องทำ
         result = FindTaskByID(id)
-        if result["order_id"] != userID:
+        if userID not in result["member_id"]:
             ReplyErrorTransaction(replyToken,Channel_Access_Token)
         else:
             reply = FlexInformation(result)
@@ -226,13 +210,11 @@ def assignTask():
     typeWork = payload.get('type')
     detail = payload.get('detail')
     deadline_str = "{}/{}/{}".format(str(deadline_obj.day), str(deadline_obj.month), str(deadline_obj.year))
-    # print(type(deadline))
-    # print(str(date_time_obj.day), str(date_time_obj.month), str(date_time_obj.year))
     if subject == "" and userList == [] and detail == "" and typeWork == "" and deadline == "" :
         return 'Failed', 304
     else :
-        flexOrder, userProfile = InsertNewTask(userList,member, subject, detail, typeWork, deadline_obj, userOrder, groupId)
-        replyMessage = FlexDetailTask(subject, deadline_str, flexOrder, userProfile)
+        userProfile = InsertNewTask(userList,member, subject, detail, typeWork, deadline_obj, userOrder, groupId)
+        replyMessage = FlexDetailTask(subject, detail, deadline_str, member,userProfile )
         ReplyNewTask(groupId, replyMessage, userList, Channel_Access_Token)
 
     return 'Success',201

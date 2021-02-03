@@ -278,7 +278,7 @@ def ReplyHelloMessage(ReplyToken,msg, ChannelAccessToken):
 ## ตามงาน
 def ReplyFollowTask(msg, ChannelAccessToken):
     api = 'https://api.line.me/v2/bot/message/push'
-
+    LINE_API_MultiCast = 'https://api.line.me/v2/bot/message/multicast'
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
 
     headers = {
@@ -297,9 +297,8 @@ def ReplyFollowTask(msg, ChannelAccessToken):
     }
     #ส่งให้คนถูกสั่งงาน
     bb = BubbleFollow(msg)
-    print("bb:",bb)
     sendToOR = {
-        "to": msg["order_id"],
+        "to": msg["member_id"],
         "messages": [
             bb ]
     }
@@ -307,7 +306,7 @@ def ReplyFollowTask(msg, ChannelAccessToken):
     msgToME = json.dumps(sendToCMD)
     msgToOR = json.dumps(sendToOR)
     resME = requests.post(api,headers=headers,data=msgToME)
-    resOR = requests.post(api,headers=headers,data=msgToOR)
+    resOR = requests.post(LINE_API_MultiCast,headers=headers,data=msgToOR)
     
     return 200
 
@@ -443,33 +442,21 @@ def ReplyAcceptRejectMessage(msg,status, ChannelAccessToken):
         ]
     }
     #ส่งยืนยันการตรวจสอบงานให้ผู้ถูกสั่งงาน
-    if msg["type"] == "group": 
-        setAPI = multiple
-        sendToOR = {
-            "to": msg["member_id"],
-            "messages":[{
-                    "type":"text",
-                    "text":"คุณ: {}\nตรวจงาน: {}\nสถานะ: {}".format(msg["order_by"],msg["task"],status),
-                    "quickReply": QuickReply()
-                }
-            ]
-        }
-    else:
-        setAPI = api
-        sendToOR = {
-            "to": msg["order_id"],
-            "messages":[{
-                    "type":"text",
-                    "text":"คุณ: {}\nตรวจงาน: {}\nสถานะ: {}".format(msg["order_by"],msg["task"],status),
-                    "quickReply": QuickReply()
-                }
-            ]
-        }
+    sendToOR = {
+        "to": msg["member_id"],
+        "messages":[{
+                "type":"text",
+                "text":"คุณ: {}\nตรวจงาน: {}\nสถานะ: {}".format(msg["order_by"],msg["task"],status),
+                "quickReply": QuickReply()
+            }
+        ]
+    }
+
 
     msgToOR = json.dumps(sendToOR)
     msgToME = json.dumps(sendToCMD)
     resME = requests.post(api,headers=headers,data=msgToME)
-    resOR = requests.post(setAPI,headers=headers,data=msgToOR)
+    resOR = requests.post(multiple,headers=headers,data=msgToOR)
     
     return 200
 
@@ -520,30 +507,18 @@ def ReplyCancelTask(ReplyToken,ReplyMessage,task,ChannelAccessToken):
         ]
     }
 
-    if task["type"] == "group":
-        data = {
-            "to": task["member_id"],
-            "messages": [{
-                "type": "message",
-                "text": "คุณ {}\nทำการยกเลิกงาน\n{}\nของคุณ".format(task["order_by"],task["task"]),
-                "quickReply": QuickReply()
-            }]
-        }
-        data = json.dumps(data)
-        r = requests.post(Multiple,headers=headers,data=data)
-    else:
-        data = {
-            "to": task["order_id"],
-            "messages": [{
-                "type": "message",
-                "text": "คุณ {}\nทำการยกเลิกงาน\n{}\nของคุณ".format(task["order_by"],task["task"]),
-                "quickReply": QuickReply()
-            }]
-        }
-        data = json.dumps(data)
-        r = requests.post(API,headers=headers,data=data)
-
+    resU = {
+        "to": task["member_id"],
+        "messages": [{
+            "type": "message",
+            "text": "คุณ {}\nทำการยกเลิกงาน\n{}\nของคุณ".format(task["order_by"],task["task"]),
+            "quickReply": QuickReply()
+        }]
+    }
+    
+    respUser = json.dumps(resU)
     res = json.dumps(responseFlex)
+    r = requests.post(Multiple,headers=headers,data=respUser)
     resp = requests.post(REPLY,headers=headers,data=res)
 
     return 200
@@ -602,45 +577,6 @@ def GetUserProfile(userID,ChannelAccessToken):
     return jsLoads["displayName"]
 
 
-def PushMessage(ChannelAccessToken):
-    api = 'https://api.line.me/v2/bot/message/push '
-    Authorization = 'Bearer {}'.format(ChannelAccessToken)
-
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': Authorization
-    }
-
-    data = {
-        "to": "Uae4fc581117126f7ac87e1096ed77ead",
-        "messages":[
-            {"type": "flex",
-            "altText": "This is a Flex Message",
-            "contents": {
-                "type": "bubble",
-                "body": {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                    {
-                    "type": "text",
-                    "text": "Hello,"
-                    },
-                    {
-                    "type": "text",
-                    "text": "World!"
-                    }
-                ]
-                }
-            }
-            }
-        ]
-    }
-    data = json.dumps(data)
-
-    r = requests.post(api,headers=headers,data=data)
-    
-    return 200
 
 
 def GetUserIdsFollowBot(ChannelAccessToken):

@@ -11,108 +11,136 @@ from Project.Line.lineAPI import *
 from Project.Line.flex import *
 
 
-collection = db["task"]
+collection = db["tasks"]
 true = True
 ## งานที่ต้องทำ
 def FindTask(userID):
     reply = []
-    # results = collection.find({"order_to":userProfile},{"_id":0,"order_to":0,"task":1,"deadline":1,"created_at":1,"order_by":1,"done_at":0})
-    results = collection.find({"order_id":userID,"status":"In Progress"}).sort('deadline', pymongo.ASCENDING)
+    results = collection.find({"member_id": {"$elemMatch":{"$eq":userID}},"status":"In Progress"}).sort('deadline', pymongo.ASCENDING).limit(5)
     for result in results:
         deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
         createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
         if datetime.now() > result['deadline'] :
-            status = 'เกินกำหนด'
+            # status = 'เกินกำหนด'
             color = "#FF4646FF"
         else:
-            status = 'ยังไม่เลยกำหนด'
-            color = "#FFFFFFFF"
-
-        messageBack = {
-                        "type": "box",
-                        "layout": "baseline",
-                        "paddingBottom": "5px",
-                        "contents": [
-                        {
-                            "type": "text",
-                            "text": result["task"],
-                            "weight": "bold",
-                            "size": "md",
-                            "color": "#FFFFFFFF",
-                            "align": "start",
-                            "wrap": true,
-                            "action" : {
-                                "type": "postback",
-                                "text": "รายละเอียดงาน {}".format(result["task"]),
-                                "data": "action=information&id={}".format(str(result["_id"]))
-                            },
-                            "contents": []
-                        },
-                        {
-                            "type": "text",
-                            "text": deadline,
-                            "weight": "bold",
-                            "size": "md",
-                            "color": color,
-                            "align": "end",
-                            "contents": []
-                        }
-                        ]
+            # status = 'ยังไม่เลยกำหนด'
+            color = "#000000FF"
+        messageTask = {
+            "type": "box",
+            "layout": "baseline",
+            "action" : {
+                "type": "postback",
+                "text": "รายละเอียดงาน {}".format(result["task"]),
+                "data": "action=information&id={}".format(str(result["_id"]))
+            },
+            "contents": [
+            {
+                "type": "text",
+                "text": result["task"],
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": deadline,
+                "color": color,
+                "align": "end",
+                "contents": []
+            }
+            ]
         }
-        reply.append(messageBack)
-
+        reply.append(messageTask)
+        messageGroup = {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+            {
+                "type": "text",
+                "text": "กลุ่ม:",
+                "weight": "bold",
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": result["group_name"],
+                "align": "end",
+                "contents": []
+            }
+            ]
+        }
+        reply.append(messageGroup)
+        space = {
+            "type": "separator",
+            "margin": "sm",
+            "color": "#DDDDDDFF"
+        }
+        reply.append(space)
     return reply
 
 ## งานที่ต้องทำในกลุ่ม
 def FindTaskInGroup(userID,groupID):
     reply = []
-    # results = collection.find({"order_to":userProfile},{"_id":0,"order_to":0,"task":1,"deadline":1,"created_at":1,"order_by":1,"done_at":0})
-    results = collection.find({"order_id":userID,"group_id":groupID,"status":"In Progress"})
+    results = collection.find({"member_id": {"$elemMatch":{"$eq":userID}},"group_id":groupID,"status":"In Progress"}).sort('deadline', pymongo.ASCENDING).limit(5)
     for result in results:
-        print('result:',result)
         deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
         createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
         if datetime.now() > result['deadline'] :
-            status = 'เกินกำหนด'
+            # status = 'เกินกำหนด'
             color = "#FF4646FF"
         else:
-            status = 'ยังไม่เลยกำหนด'
-            color = "#FFFFFFFF"
+            # status = 'ยังไม่เลยกำหนด'
+            color = "#000000FF"
 
-        messageBack = {
-                        "type": "box",
-                        "layout": "baseline",
-                        "paddingBottom": "5px",
-                        "contents": [
-                        {
-                            "type": "text",
-                            "text": result["task"],
-                            "weight": "bold",
-                            "size": "md",
-                            "color": "#FFFFFFFF",
-                            "align": "start",
-                            "wrap": true,
-                            "action" : {
-                                "type": "postback",
-                                "text": "รายละเอียดงาน {}".format(result["task"]),
-                                "data": "action=information&id={}".format(str(result["_id"]))
-                            },
-                            "contents": []
-                        },
-                        {
-                            "type": "text",
-                            "text": deadline,
-                            "weight": "bold",
-                            "size": "md",
-                            "color": color,
-                            "align": "end",
-                            "contents": []
-                        }
-                        ]
+        messageTask = {
+            "type": "box",
+            "layout": "baseline",
+            "action" : {
+                "type": "postback",
+                "text": "รายละเอียดงาน {}".format(result["task"]),
+                "data": "action=information&id={}".format(str(result["_id"]))
+            },
+            "contents": [
+            {
+                "type": "text",
+                "text": result["task"],
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": deadline,
+                "color": color,
+                "align": "end",
+                "contents": []
+            }
+            ]
         }
-        reply.append(messageBack)
+        reply.append(messageTask)
+        messageGroup = {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+            {
+                "type": "text",
+                "text": "กลุ่ม:",
+                "weight": "bold",
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": result["group_name"],
+                "align": "end",
+                "contents": []
+            }
+            ]
+        }
+        reply.append(messageGroup)
+        space = {
+            "type": "separator",
+            "margin": "sm",
+            "color": "#DDDDDDFF"
+        }
+        reply.append(space)
 
-    print('reply:',reply)
     return reply
 
 ## งานที่สั่ง
@@ -128,71 +156,57 @@ def FindFollowTask(userID):
 
         else:
             status = 'ยังไม่เลยกำหนด'
-            color = "#FFFFFFFF"
-        messageBack = {
-                            "type": "box",
-                            "layout": "baseline",
-                            "margin": "md",
-                            "paddingBottom": "5px",
-                            "contents": [
-                            {
-                                "type": "text",
-                                "text": result["task"],
-                                "weight": "bold",
-                                "size": "md",
-                                "color": "#FFFFFFFF",
-                                "align": "start",
-                                "wrap": true,
-                                "action" : {
-                                "type": "postback",
-                                "text": "รายละเอียดงาน {}".format(result["task"]),
-                                "data": "action=followinfo&id={}".format(str(result["_id"]))
-                                },
-                                "contents": []
-                            },
-                            {
-                                "type": "text",
-                                "text": deadline,
-                                "weight": "bold",
-                                "size": "md",
-                                "color": color,
-                                "align": "end",
-                                "contents": []
-                            }
-                            ]
-                        }
-        reply.append(messageBack)
-        cmd =   {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                    {
-                        "type": "text",
-                        "text": "ผู้รับผิดชอบ :",
-                        "weight": "bold",
-                        "size": "md",
-                        "color": "#FFFFFFFF",
-                        "align": "start",
-                        "contents": []
-                    },
-                    {
-                        "type": "text",
-                        "text": '@'+result["order_to"],
-                        "weight": "bold",
-                        "color": "#5AD5C1FF",
-                        "align": "end",
-                        "contents": []
-                    }
-                    ]
-                }
-        reply.append(cmd)
-        sp  =   {
-                "type": "separator",
-                "margin": "lg",
-                "color": "#ECB865"
-                } 
+            color = "#000000FF"
+        messageTask = {
+            "type": "box",
+            "layout": "baseline",
+            "action" : {
+                "type": "postback",
+                "text": "รายละเอียดงาน {}".format(result["task"]),
+                "data": "action=followinfo&id={}".format(str(result["_id"]))
+            },
+            "contents": [
+            {
+                "type": "text",
+                "text": result["task"],
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": deadline,
+                "color": color,
+                "align": "end",
+                "contents": []
+            }
+            ]
+        }
+        reply.append(messageTask)
+        messageUser = {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+            {
+                "type": "text",
+                "text": "ผู้รับผิดชอบ:",
+                "weight": "bold",
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": "{}".format("@"+" @".join(result["member"])),
+                "align": "end",
+                "contents": []
+            }
+            ]
+        }
+        reply.append(messageUser)
+        space = {
+            "type": "separator",
+            "margin": "sm",
+            "color": "#DDDDDDFF"
+        }
+        reply.append(space)
         
-        reply.append(sp)
     return reply
 
 
@@ -209,72 +223,57 @@ def FindFollowTaskInGroup(userID,groupID):
 
         else:
             status = 'ยังไม่เลยกำหนด'
-            color = "#FFFFFFFF"
+            color = "#000000FF"
 
-        messageBack = {
-                            "type": "box",
-                            "layout": "baseline",
-                            "margin": "md",
-                            "paddingBottom": "5px",
-                            "contents": [
-                            {
-                                "type": "text",
-                                "text": result["task"],
-                                "weight": "bold",
-                                "size": "md",
-                                "color": "#FFFFFFFF",
-                                "align": "start",
-                                "wrap": true,
-                                "action" : {
-                                "type": "postback",
-                                "text": "รายละเอียดงาน {}".format(result["task"]),
-                                "data": "action=followinfo&id={}".format(str(result["_id"]))
-                                },
-                                "contents": []
-                            },
-                            {
-                                "type": "text",
-                                "text": deadline,
-                                "weight": "bold",
-                                "size": "md",
-                                "color": color,
-                                "align": "end",
-                                "contents": []
-                            }
-                            ]
-                        }
-        reply.append(messageBack)
-        cmd =   {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                    {
-                        "type": "text",
-                        "text": "ผู้รับผิดชอบ :",
-                        "weight": "bold",
-                        "size": "md",
-                        "color": "#FFFFFFFF",
-                        "align": "start",
-                        "contents": []
-                    },
-                    {
-                        "type": "text",
-                        "text": '@'+result["order_to"],
-                        "weight": "bold",
-                        "color": "#5AD5C1FF",
-                        "align": "end",
-                        "contents": []
-                    }
-                    ]
-                }
-        reply.append(cmd)
-        sp  =   {
-                "type": "separator",
-                "margin": "lg",
-                "color": "#ECB865"
-                } 
-        
-        reply.append(sp)
+        messageTask = {
+            "type": "box",
+            "layout": "baseline",
+            "action" : {
+                "type": "postback",
+                "text": "รายละเอียดงาน {}".format(result["task"]),
+                "data": "action=followinfo&id={}".format(str(result["_id"]))
+            },
+            "contents": [
+            {
+                "type": "text",
+                "text": result["task"],
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": deadline,
+                "color": color,
+                "align": "end",
+                "contents": []
+            }
+            ]
+        }
+        reply.append(messageTask)
+        messageUser = {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+            {
+                "type": "text",
+                "text": "ผู้รับผิดชอบ:",
+                "weight": "bold",
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": "{}".format("@"+" @".join(result["member"])),
+                "align": "end",
+                "contents": []
+            }
+            ]
+        }
+        reply.append(messageUser)
+        space = {
+            "type": "separator",
+            "margin": "sm",
+            "color": "#DDDDDDFF"
+        }
+        reply.append(space)
 
     return reply
 
@@ -293,72 +292,59 @@ def RejectFollowTask(userID):
 
         else:
             status = 'ยังไม่เลยกำหนด'
-            color = "#FFFFFFFF"
-        messageBack = {
-                            "type": "box",
-                            "layout": "baseline",
-                            "margin": "md",
-                            "paddingBottom": "5px",
-                            "contents": [
-                            {
-                                "type": "text",
-                                "text": result["task"],
-                                "weight": "bold",
-                                "size": "md",
-                                "color": "#FFFFFFFF",
-                                "align": "start",
-                                "wrap": true,
-                                "action": {
-                                    "type": "postback",
-                                    "label": "ยกเลิกงาน"+result["task"],
-                                    "text":"ตรวจสอบการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(result["task"],result["order_to"]),
-                                    "data": "action=removeInfo&id={}".format(str(result["_id"]))
-                                },
-                                "contents": []
-                            },
-                            {
-                                "type": "text",
-                                "text": deadline,
-                                "weight": "bold",
-                                "size": "md",
-                                "color": color,
-                                "align": "end",
-                                "contents": []
-                            }
-                            ]
-                        }
-        reply.append(messageBack)
-        cmd =   {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                    {
-                        "type": "text",
-                        "text": "ผู้รับผิดชอบ :",
-                        "weight": "bold",
-                        "size": "md",
-                        "color": "#FFFFFFFF",
-                        "align": "start",
-                        "contents": []
-                    },
-                    {
-                        "type": "text",
-                        "text": '@'+result["order_to"],
-                        "weight": "bold",
-                        "color": "#5AD5C1FF",
-                        "align": "end",
-                        "contents": []
-                    }
-                    ]
-                }
-        reply.append(cmd)
-        sp  =   {
-                "type": "separator",
-                "margin": "lg",
-                "color": "#ECB865"
-                } 
+            color = "#000000FF"
         
-        reply.append(sp)
+        messageTask = {
+            "type": "box",
+            "layout": "baseline",
+            "action": {
+                "type": "postback",
+                "label": "ยกเลิกงาน"+result["task"],
+                "text":"ตรวจสอบการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(result["task"],"@"+" @".join(result["member"])),
+                "data": "action=removeInfo&id={}".format(str(result["_id"]))
+            },
+            "contents": [
+            {
+                "type": "text",
+                "text": result["task"],
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": deadline,
+                "color": color,
+                "align": "end",
+                "contents": []
+            }
+            ]
+        }
+        reply.append(messageTask)
+        messageUser = {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+            {
+                "type": "text",
+                "text": "ผู้รับผิดชอบ:",
+                "weight": "bold",
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": "{}".format("@"+" @".join(result["member"])),
+                "align": "end",
+                "contents": []
+            }
+            ]
+        }
+        reply.append(messageUser)
+        space = {
+            "type": "separator",
+            "margin": "sm",
+            "color": "#DDDDDDFF"
+        }
+        reply.append(space)
+        
     return reply
 
 
@@ -370,77 +356,62 @@ def RejectFollowTaskInGroup(userID,groupID):
         deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
         createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
         if datetime.now() > result['deadline'] :
-            status = 'เกินกำหนด'
+            # status = 'เกินกำหนด'
             color = "#FF4646FF"
-
         else:
-            status = 'ยังไม่เลยกำหนด'
-            color = "#FFFFFFFF"
-
-        messageBack = {
-                            "type": "box",
-                            "layout": "baseline",
-                            "margin": "md",
-                            "paddingBottom": "5px",
-                            "contents": [
-                            {
-                                "type": "text",
-                                "text": result["task"],
-                                "weight": "bold",
-                                "size": "md",
-                                "color": "#FFFFFFFF",
-                                "align": "start",
-                                "wrap": true,
-                                "action": {
-                                    "type": "postback",
-                                    "text":"ตรวจสอบการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(result["task"],result["order_to"]),
-                                    "data": "action=removeInfo&id={}".format(str(result["_id"]))
-                                },
-                                "contents": []
-                            },
-                            {
-                                "type": "text",
-                                "text": deadline,
-                                "weight": "bold",
-                                "size": "md",
-                                "color": color,
-                                "align": "end",
-                                "contents": []
-                            }
-                            ]
-                        }
-        reply.append(messageBack)
-        cmd =   {
-                    "type": "box",
-                    "layout": "baseline",
-                    "contents": [
-                    {
-                        "type": "text",
-                        "text": "ผู้รับผิดชอบ :",
-                        "weight": "bold",
-                        "size": "md",
-                        "color": "#FFFFFFFF",
-                        "align": "start",
-                        "contents": []
-                    },
-                    {
-                        "type": "text",
-                        "text": '@'+result["order_to"],
-                        "weight": "bold",
-                        "color": "#5AD5C1FF",
-                        "align": "end",
-                        "contents": []
-                    }
-                    ]
-                }
-        reply.append(cmd)
-        sp  =   {
-                "type": "separator",
-                "margin": "lg",
-                "color": "#ECB865"
-                } 
+            # status = 'ยังไม่เลยกำหนด'
+            color = "#000000FF"
         
-        reply.append(sp)
+        messageTask = {
+            "type": "box",
+            "layout": "baseline",
+            "action": {
+                "type": "postback",
+                "label": "ยกเลิกงาน"+result["task"],
+                "text":"ตรวจสอบการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(result["task"],"@"+" @".join(result["member"])),
+                "data": "action=removeInfo&id={}".format(str(result["_id"]))
+            },
+            "contents": [
+            {
+                "type": "text",
+                "text": result["task"],
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": deadline,
+                "color": color,
+                "align": "end",
+                "contents": []
+            }
+            ]
+        }
+        reply.append(messageTask)
+        messageUser = {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+            {
+                "type": "text",
+                "text": "ผู้รับผิดชอบ:",
+                "weight": "bold",
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": "{}".format("@"+" @".join(result["member"])),
+                "align": "end",
+                "contents": []
+            }
+            ]
+        }
+        reply.append(messageUser)
+        space = {
+            "type": "separator",
+            "margin": "sm",
+            "color": "#DDDDDDFF"
+        }
+        reply.append(space)
 
     return reply
 
@@ -449,9 +420,9 @@ def FindHistory(userID,groupID):
 
     # รายบุคคล
     if groupID == '':
-        results = collection.find({"$and":[{"$or":[{"status":"Reject"},{"status":"Done"}]},{"$or":[{"order_id":userID},{"from_id":userID}]}]}).sort('done_at',pymongo.DESCENDING).limit(5)
+        results = collection.find({"$and":[{"$or":[{"status":"Reject"},{"status":"Done"}]},{"$or":[{"member_id": {"$elemMatch":{"$eq":userID}}},{"from_id":userID}]}]}).sort('done_at',pymongo.DESCENDING).limit(5)
     else:
-        results = collection.find({"$and":[{"$or":[{"status":"Reject"},{"status":"Done"}]},{"$or":[{"order_id":userID},{"from_id":userID}]},{"group_id":groupID}]}).sort('done_at',pymongo.DESCENDING).limit(5)   #ในกลุ่ม
+        results = collection.find({"$and":[{"$or":[{"status":"Reject"},{"status":"Done"}]},{"$or":[{"member_id": {"$elemMatch":{"$eq":userID}}},{"from_id":userID}]},{"group_id":groupID}]}).sort('done_at',pymongo.DESCENDING).limit(5)   #ในกลุ่ม
 
     for result in results:
         
@@ -498,7 +469,7 @@ def FindHistory(userID,groupID):
                     },
                     {
                         "type": "text",
-                        "text": '@'+result["order_to"],
+                        "text": "{}".format('@'+" @".join(result["member"])),
                         "weight": "bold",
                         "color": "#FF8050FF",
                         "align": "end",
@@ -530,10 +501,7 @@ def FollowTask(userID):
 
         else:
             status = 'ยังไม่เลยกำหนด'
-            color = "#FFFFFFFF"
-
-        group = GetGroupSummary(result["group_id"],Channel_Access_Token)
-        print("group_id:",group)
+            color = "#000000FF"
         messageBack = {
                             "type": "box",
                             "layout": "baseline",
@@ -583,7 +551,7 @@ def FollowTask(userID):
                     },
                     {
                         "type": "text",
-                        "text": '@'+result["order_to"],
+                        "text": "{}".format("@"+" @".join(result["member"])),
                         "weight": "bold",
                         "color": "#5AD5C1FF",
                         "align": "end",
@@ -608,7 +576,7 @@ def FollowTask(userID):
               },
               {
                 "type": "text",
-                "text": group,
+                "text": result["group_name"],
                 "weight": "bold",
                 "color": "#FFFFFFFF",
                 "align": "end",
@@ -631,116 +599,109 @@ def FollowTask(userID):
 ## ตรวจสอบงานรอรีวิว
 def FindReviewTask(userID):
     reply = [] 
-    subId = []
     results = collection.find({"from_id":userID, "status":"Review"})
     for result in results:
-        if result["sub_id"] in subId :
-            continue
+       
+        deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
+        createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
+        if datetime.now() > result['deadline'] :
+            status = 'เกินกำหนด'
+            color = "#FF4646FF"
+
         else:
-            deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
-            createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
-            if datetime.now() > result['deadline'] :
-                status = 'เกินกำหนด'
-                color = "#FF4646FF"
-
-            else:
-                status = 'ยังไม่เลยกำหนด'
-                color = "#FFFFFFFF"
-
-            group = GetGroupSummary(result["group_id"],Channel_Access_Token)
-            print("group_id:",group)
-            messageBack = {
-                                "type": "box",
-                                "layout": "baseline",
-                                "margin": "md",
-                                "paddingBottom": "5px",
-                                "contents": [
-                                {
-                                    "type": "text",
-                                    "text": result["task"],
-                                    "weight": "bold",
-                                    "size": "md",
-                                    "color": "#FFFFFFFF",
-                                    "align": "start",
-                                    "wrap": true,
-                                    "action": {
-                                        "type": "postback",
-                                        "text": "ตรวจงาน\n{}".format(result["task"]),
-                                        "data": "action=ifcheck&id={}".format(str(result["_id"]))
-                                    },
-                                    "contents": []
+            status = 'ยังไม่เลยกำหนด'
+            color = "#000000FF"
+        messageBack = {
+                            "type": "box",
+                            "layout": "baseline",
+                            "margin": "md",
+                            "paddingBottom": "5px",
+                            "contents": [
+                            {
+                                "type": "text",
+                                "text": result["task"],
+                                "weight": "bold",
+                                "size": "md",
+                                "color": "#FFFFFFFF",
+                                "align": "start",
+                                "wrap": true,
+                                "action": {
+                                    "type": "postback",
+                                    "text": "ตรวจงาน\n{}".format(result["task"]),
+                                    "data": "action=ifcheck&id={}".format(str(result["_id"]))
                                 },
-                                {
-                                    "type": "text",
-                                    "text": deadline,
-                                    "weight": "bold",
-                                    "size": "md",
-                                    "color": color,
-                                    "align": "end",
-                                    "contents": []
-                                }
-                                ]
+                                "contents": []
+                            },
+                            {
+                                "type": "text",
+                                "text": deadline,
+                                "weight": "bold",
+                                "size": "md",
+                                "color": color,
+                                "align": "end",
+                                "contents": []
                             }
-            reply.append(messageBack)
-            cmd =   {
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [
-                        {
-                            "type": "text",
-                            "text": "ผู้รับผิดชอบ :",
-                            "weight": "bold",
-                            "size": "md",
-                            "color": "#FFFFFFFF",
-                            "align": "start",
-                            "contents": []
-                        },
-                        {
-                            "type": "text",
-                            "text": '@'+result["order_to"],
-                            "weight": "bold",
-                            "color": "#5AD5C1FF",
-                            "align": "end",
-                            "contents": []
+                            ]
                         }
-                        ]
+        reply.append(messageBack)
+        cmd =   {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [
+                    {
+                        "type": "text",
+                        "text": "ผู้รับผิดชอบ :",
+                        "weight": "bold",
+                        "size": "md",
+                        "color": "#FFFFFFFF",
+                        "align": "start",
+                        "contents": []
+                    },
+                    {
+                        "type": "text",
+                        "text": "{}".format("@"+" @".join(result["member"])),
+                        "weight": "bold",
+                        "color": "#5AD5C1FF",
+                        "align": "end",
+                        "contents": []
                     }
-            reply.append(cmd)
-            grp = {
-                "type": "box",
-                "layout": "baseline",
-                "spacing": "xs",
-                "margin": "sm",
-                "contents": [
-                {
-                    "type": "text",
-                    "text": "กลุ่ม :",
-                    "weight": "bold",
-                    "size": "md",
-                    "color": "#FFFFFFFF",
-                    "contents": []
-                },
-                {
-                    "type": "text",
-                    "text": group,
-                    "weight": "bold",
-                    "color": "#FFFFFFFF",
-                    "align": "end",
-                    "wrap": true,
-                    "position": "relative",
-                    "contents": []
+                    ]
                 }
-                ]
+        reply.append(cmd)
+        grp = {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "xs",
+            "margin": "sm",
+            "contents": [
+            {
+                "type": "text",
+                "text": "กลุ่ม :",
+                "weight": "bold",
+                "size": "md",
+                "color": "#FFFFFFFF",
+                "contents": []
+            },
+            {
+                "type": "text",
+                "text": result["group_name"],
+                "weight": "bold",
+                "color": "#FFFFFFFF",
+                "align": "end",
+                "wrap": true,
+                "position": "relative",
+                "contents": []
             }
-            reply.append(grp)
-            sp  =   {
-                    "type": "separator",
-                    "margin": "lg",
-                    "color": "#ECB865"
-                    } 
-            
-            reply.append(sp)
-            subId.append(result["sub_id"])
+            ]
+        }
+        reply.append(grp)
+        sp  =   {
+                "type": "separator",
+                "margin": "lg",
+                "color": "#ECB865"
+                } 
+        
+        reply.append(sp)
 
     return reply
 
@@ -748,7 +709,7 @@ def FindReviewTask(userID):
 #ส่งงาน
 def ListTaskForSend(userID):
     reply = [] 
-    results = collection.find({"order_id":userID, "status":"In Progress"})
+    results = collection.find({"member_id": {"$elemMatch":{"$eq":userID}}, "status":"In Progress"})
     for result in results:
         deadline = datetime.strftime(result["deadline"],"%d %b, %Y")
         createAt = datetime.strftime(result["created_at"],"%d %b, %Y")
@@ -758,10 +719,8 @@ def ListTaskForSend(userID):
 
         else:
             status = 'ยังไม่เลยกำหนด'
-            color = "#FFFFFFFF"
+            color = "#000000FF"
 
-        group = GetGroupSummary(result["group_id"],Channel_Access_Token)
-        print("group_id:",group)
         messageBack = {
                             "type": "box",
                             "layout": "baseline",
@@ -835,7 +794,7 @@ def ListTaskForSend(userID):
               },
               {
                 "type": "text",
-                "text": group,
+                "text": result["group_name"],
                 "weight": "bold",
                 "color": "#FFFFFFFF",
                 "align": "end",
@@ -870,8 +829,7 @@ def FindTaskNotiToday(userIds):
 
     for Id in userIds:
         task = []
-        results = collection.find({"order_id":Id,"status":"In Progress","deadline":dateObj})
-        print("results",results)
+        results = collection.find({"member_id": {"$elemMatch":{"$eq":Id}},"status":"In Progress","deadline":dateObj})
         for result in results:
             print("r",result)
             tFlex = {
@@ -887,6 +845,11 @@ def FindTaskNotiToday(userIds):
                             "size": "md",
                             "color": "#FFFFFFFF",
                             "align": "start",
+                            "action": {
+                                "type": "postback",
+                                "text": "ตรวจสอบข้อมูลการส่งงาน\n{}".format(result["task"]),
+                                "data": "action=info&id={}".format(str(result["_id"]))
+                            },
                             "contents": []
                         }
                         ]
