@@ -86,15 +86,6 @@ def ReplyQuickMessageSayJeny(ReplyToken,GroupID,ChannelAccessToken):
                                 "label":"ประวัติงาน",
                                 "text":"#ประวัติงาน"
                             }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5dB8.png",
-                            "action": {
-                                "type":"message",
-                                "label":"ตรวจสอบงานผ่านเว็บไซต์",
-                                "text":"เว็ป"
-                            }
                         }
                     ]
                 }
@@ -237,7 +228,12 @@ def ReplyRmdMessage(ReplyToken,msg, ChannelAccessToken):
     data = {
         "replyToken": ReplyToken,
         "messages":[
-            Menu()
+            Menu(),
+            {
+                "type": "image",
+                "originalContentUrl": "https://sv1.picz.in.th/images/2021/02/01/lMQfDt.jpg",
+                "previewImageUrl": "https://sv1.picz.in.th/images/2021/02/01/lMQfDt.th.jpg"
+            }
         ]
     }
     data = json.dumps(data) ## Dump dict >> Json obj

@@ -243,7 +243,7 @@ def FlexRmd():
                         },
                         {
                             "type": "text",
-                            "text": "www..",
+                            "text": "https://kmitl-chatbot.herokuapp.com",
                             "margin": "md",
                             "size": "sm",
                             "color": "#ffffff"
@@ -322,7 +322,11 @@ def FlexMyTask(task):
                             },
                             {
                                 "type": "text",
-                                "text": "www.",
+                                "text": "https://kmitl-chatbot.herokuapp.com",
+                                "action": {
+                                    "type": "uri",
+                                    "uri": "https://kmitl-chatbot.herokuapp.com"
+                                },
                                 "contents": []
                             }
                             ]
@@ -412,7 +416,11 @@ def FlexMyTask(task):
                     },
                     {
                         "type": "text",
-                        "text": "www.",
+                        "text": "https://kmitl-chatbot.herokuapp.com",
+                        "action": {
+                            "type": "uri",
+                            "uri": "https://kmitl-chatbot.herokuapp.com"
+                        },
                         "contents": []
                     }
                     ]
@@ -486,7 +494,11 @@ def FlexFollowTask(task):
                                 },
                                 {
                                     "type": "text",
-                                    "text": "www.",
+                                    "text": "https://kmitl-chatbot.herokuapp.com",
+                                    "action": {
+                                        "type": "uri",
+                                        "uri": "https://kmitl-chatbot.herokuapp.com"
+                                    },
                                     "contents": []
                                 }
                                 ]
@@ -578,7 +590,11 @@ def FlexFollowTask(task):
                     },
                     {
                         "type": "text",
-                        "text": "www.",
+                        "text": "https://kmitl-chatbot.herokuapp.com",
+                        "action": {
+                            "type": "uri",
+                            "uri": "https://kmitl-chatbot.herokuapp.com"
+                        },
                         "contents": []
                     }
                     ]
@@ -719,7 +735,11 @@ def FlexTaskToday(task):
                     },
                     {
                         "type": "text",
-                        "text": "www.",
+                        "text": "https://kmitl-chatbot.herokuapp.com",
+                        "action": {
+                            "type": "uri",
+                            "uri": "https://kmitl-chatbot.herokuapp.com"
+                        },
                         "contents": []
                     }
                     ]
@@ -775,7 +795,11 @@ def FlexTaskToday(task):
                     },
                     {
                         "type": "text",
-                        "text": "www.",
+                        "text": "https://kmitl-chatbot.herokuapp.com",
+                        "action": {
+                            "type": "uri",
+                            "uri": "https://kmitl-chatbot.herokuapp.com"
+                        },
                         "contents": []
                     }
                     ]
@@ -850,7 +874,11 @@ def FlexFollowTaskReject(task):
                                 },
                                 {
                                     "type": "text",
-                                    "text": "www.",
+                                    "text": "https://kmitl-chatbot.herokuapp.com",
+                                    "action": {
+                                        "type": "uri",
+                                        "uri": "https://kmitl-chatbot.herokuapp.com"
+                                    },
                                     "contents": []
                                 }
                                 ]
@@ -942,7 +970,11 @@ def FlexFollowTaskReject(task):
                     },
                     {
                         "type": "text",
-                        "text": "www.",
+                        "text": "https://kmitl-chatbot.herokuapp.com",
+                        "action": {
+                            "type": "uri",
+                            "uri": "https://kmitl-chatbot.herokuapp.com"
+                        },
                         "contents": []
                     }
                     ]
@@ -1017,7 +1049,11 @@ def HistoryTask(task):
                                 },
                                 {
                                     "type": "text",
-                                    "text": "www.",
+                                    "text": "https://kmitl-chatbot.herokuapp.com",
+                                    "action": {
+                                        "type": "uri",
+                                        "uri": "https://kmitl-chatbot.herokuapp.com"
+                                    },
                                     "contents": []
                                 }
                                 ]
@@ -1100,7 +1136,11 @@ def HistoryTask(task):
                             },
                             {
                                 "type": "text",
-                                "text": "www.",
+                                "text": "https://kmitl-chatbot.herokuapp.com",
+                                "action": {
+                                    "type": "uri",
+                                    "uri": "https://kmitl-chatbot.herokuapp.com"
+                                },
                                 "contents": []
                             }
                             ]
@@ -1176,7 +1216,11 @@ def FlexFollow(task):
                                 },
                                 {
                                     "type": "text",
-                                    "text": "www.",
+                                    "text": "https://kmitl-chatbot.herokuapp.com",
+                                    "action": {
+                                        "type": "uri",
+                                        "uri": "https://kmitl-chatbot.herokuapp.com"
+                                    },
                                     "contents": []
                                 }
                                 ]
@@ -1268,7 +1312,11 @@ def FlexFollow(task):
                     },
                     {
                         "type": "text",
-                        "text": "www.",
+                        "text": "https://kmitl-chatbot.herokuapp.com",
+                        "action": {
+                            "type": "uri",
+                            "uri": "https://kmitl-chatbot.herokuapp.com"
+                        },
                         "contents": []
                     }
                     ]
@@ -1343,7 +1391,11 @@ def FlexReviewTask(task):
                                 },
                                 {
                                     "type": "text",
-                                    "text": "www.",
+                                    "text": "https://kmitl-chatbot.herokuapp.com",
+                                    "action": {
+                                        "type": "uri",
+                                        "uri": "https://kmitl-chatbot.herokuapp.com"
+                                    },
                                     "contents": []
                                 }
                                 ]
@@ -1426,7 +1478,11 @@ def FlexReviewTask(task):
                     },
                     {
                         "type": "text",
-                        "text": "www.",
+                        "text": "https://kmitl-chatbot.herokuapp.com",
+                        "action": {
+                            "type": "uri",
+                            "uri": "https://kmitl-chatbot.herokuapp.com"
+                        },
                         "contents": []
                     }
                     ]
@@ -1500,7 +1556,11 @@ def FlexTaskList(task):
                                 },
                                 {
                                     "type": "text",
-                                    "text": "www.",
+                                    "text": "https://kmitl-chatbot.herokuapp.com",
+                                    "action": {
+                                        "type": "uri",
+                                        "uri": "https://kmitl-chatbot.herokuapp.com"
+                                    },
                                     "contents": []
                                 }
                                 ]
@@ -1592,7 +1652,11 @@ def FlexTaskList(task):
                     },
                     {
                         "type": "text",
-                        "text": "www.",
+                        "text": "https://kmitl-chatbot.herokuapp.com",
+                        "action": {
+                            "type": "uri",
+                            "uri": "https://kmitl-chatbot.herokuapp.com"
+                        },
                         "contents": []
                     }
                     ]
@@ -2184,7 +2248,7 @@ def QuickReply():
                 },
                 {
                     "type":"action",
-                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5dB8.png",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/29/lJvq9k.png",
                     "action": {
                         "type":"postback",
                         "label":"ตรวจงาน",
@@ -2199,15 +2263,6 @@ def QuickReply():
                         "type":"message",
                         "label":"ประวัติงาน",
                         "text":"#ประวัติงาน"
-                    }
-                },
-                {
-                    "type":"action",
-                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5dB8.png",
-                    "action": {
-                        "type":"message",
-                        "label":"ตรวจสอบงานผ่านเว็บไซต์",
-                        "text":"เว็ป"
                     }
                 }
             ]

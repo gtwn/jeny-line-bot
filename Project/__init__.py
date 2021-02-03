@@ -30,8 +30,10 @@ def webhook():
         eventsType = payload['events'][0]['type']
 
         if eventsType == 'join' or eventsType == 'follow':
+            # replyMsg = FlexRmd()
+            # ReplyHelloMessage(replyToken,replyMsg,Channel_Access_Token)
             replyMsg = FlexRmd()
-            ReplyHelloMessage(replyToken,replyMsg,Channel_Access_Token)
+            ReplyRmdMessage(replyToken,replyMsg,Channel_Access_Token)
         elif eventsType == 'postback':  ## ส่ง action การทำรายการ
             data = payload['events'][0]['postback']['data']
             userID = payload['events'][0]["source"]["userId"]
