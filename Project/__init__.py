@@ -30,8 +30,7 @@ def webhook():
         eventsType = payload['events'][0]['type']
 
         if eventsType == 'join' or eventsType == 'follow':
-            replyMsg = FlexRmd()
-            ReplyRmdMessage(replyToken,replyMsg,Channel_Access_Token)
+            ReplyRmdMessage(replyToken,Channel_Access_Token)
         elif eventsType == 'postback':  ## ส่ง action การทำรายการ
             data = payload['events'][0]['postback']['data']
             userID = payload['events'][0]["source"]["userId"]
@@ -48,8 +47,7 @@ def webhook():
             if message.lower() == 'jeny':
                 ReplyQuickMessageSayJeny(replyToken,groupID,Channel_Access_Token) 
             elif '#คำสั่งแนะนำ' in message:
-                replyMsg = FlexRmd()
-                ReplyRmdMessage(replyToken,replyMsg,Channel_Access_Token)
+                ReplyRmdMessage(replyToken,Channel_Access_Token)
             elif '#งานที่ต้องทำ' in message :
                 if groupID == '':
                     task = FindTask(userID)

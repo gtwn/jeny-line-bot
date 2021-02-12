@@ -210,7 +210,7 @@ def ReplyRejectMessage(ReplyToken, ChannelAccessToken):
     
     return 200
 
-def ReplyRmdMessage(ReplyToken,msg, ChannelAccessToken):
+def ReplyRmdMessage(ReplyToken, ChannelAccessToken):
     LINE_API = 'https://api.line.me/v2/bot/message/reply'
 
     Authorization = 'Bearer {}'.format(ChannelAccessToken)
@@ -231,8 +231,8 @@ def ReplyRmdMessage(ReplyToken,msg, ChannelAccessToken):
             Menu(),
             {
                 "type": "image",
-                "originalContentUrl": "https://sv1.picz.in.th/images/2021/02/01/lMQfDt.jpg",
-                "previewImageUrl": "https://sv1.picz.in.th/images/2021/02/01/lMQfDt.th.jpg"
+                "originalContentUrl": "https://sv1.picz.in.th/images/2021/02/12/oK6QsE.jpg",
+                "previewImageUrl": "https://sv1.picz.in.th/images/2021/02/12/oK6QsE.th.jpg"
             }
         ]
     }

@@ -2135,61 +2135,48 @@ def FlexAssignTask(profile,userId,groupId):
 
 ## เมนูแนะนำคำสั่ง BOT
 def Menu():
+    
     message = {
-    "type": "template",
-    "altText": "คำสั่งแนะนำ",
-    "template": {
-        "type": "image_carousel",
-        "columns": [
-            {
-                "imageUrl": "https://sv1.picz.in.th/images/2020/11/22/bF7S7z.jpg",
-                "aspectRatio": "11:12",
-                "action": {
-                    "type": "message",
-                    "text": "#งานที่สั่ง"
+        "type": "flex",
+        "altText": "คำแนะนำการใช้งาน",
+        "contents": {
+            "type": "carousel",
+            "contents": [
+                {
+                "type": "bubble",
+                "size": "kilo",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/12/oK6dm9.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover"
                 }
-            },
-            {
-                "imageUrl": "https://sv1.picz.in.th/images/2020/11/16/bH6Ira.jpg",
-                "aspectRatio": "11:12",
-                "action": {
-                    "type": "message",
-                    "text": "#งานที่ต้องทำ"
+                },
+                {
+                "type": "bubble",
+                "size": "kilo",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/12/oK6UyN.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover"
                 }
-            },
-            {
-                "imageUrl": "https://sv1.picz.in.th/images/2020/11/18/bXAHd8.jpg",
-                "aspectRatio": "11:12",
-                "action": {
-                    "type": "message",
-                    "text": "#ยกเลิก"
+                },
+                {
+                "type": "bubble",
+                "size": "kilo",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/12/oK6QsE.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover"
                 }
-            },
-            {
-                "imageUrl": "https://sv1.picz.in.th/images/2020/11/22/byV65J.jpg",
-                "aspectRatio": "11:12",
-                "action": {
-                    "type": "message",
-                    "text": "#ส่งงาน"
                 }
-            },
-            {
-                "imageUrl": "https://sv1.picz.in.th/images/2021/01/11/lZ4Ttn.jpg",
-                "aspectRatio": "11:12",
-                "action": {
-                    "type": "message",
-                    "text": "#ตามงาน"
-                }
-            },
-            {
-                "imageUrl": "https://sv1.picz.in.th/images/2020/11/22/byVouW.jpg",
-                "aspectRatio": "11:12",
-                "action": {
-                    "type": "message",
-                    "text": "#ประวัติงาน"
-                }
-            }]
-        }
+            ]
+            }
     }
 
     return message

@@ -18,7 +18,7 @@ def RejectTask(id):
     user = []
     result = FindTaskByID(id)
     taskQuery = {"_id":ObjectId(id)}
-    setValue = { "$set": {"status":"Reject"}}
+    setValue = { "$set": {"status":"Reject", "done_at":datetime.now()}}
     collection.update_one(taskQuery,setValue)
     messageBack = {
                     "type": "text",
@@ -39,7 +39,7 @@ def RejectTask(id):
 def ReviewTaskByID(taskId):
     result = FindTaskByID(taskId)
     taskQuery = {"_id":ObjectId(taskId)}
-    setValue = { "$set": {"status":"Review"}}
+    setValue = { "$set": {"status":"Review","done_at":datetime.now()}}
     collection.update_one(taskQuery,setValue)
     
     return result
@@ -56,7 +56,7 @@ def AcceptTaskByID(id):
 def RejectTaskByID(id):
     result = FindTaskByID(id)
     taskQuery = {"_id":ObjectId(id)}
-    setValue = { "$set": {"status":"In Progress"}}
+    setValue = { "$set": {"status":"In Progress","done_at":datetime.now()}}
     collection.update_one(taskQuery,setValue)
     
     
