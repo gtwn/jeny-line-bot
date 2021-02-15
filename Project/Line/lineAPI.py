@@ -16,7 +16,8 @@ def ReplyQuickMessageSayJeny(ReplyToken,GroupID,ChannelAccessToken):
     if GroupID == '':
         data = {
             "replyToken": ReplyToken,
-            "messages":[{
+            "messages":[CommandBot(),
+            {
                 "type":"text",
                 "text":"สามารถเลือกคำสั่งที่ต้องการตามรายการด้านล่าง",
                 "quickReply": QuickReply()
@@ -27,7 +28,8 @@ def ReplyQuickMessageSayJeny(ReplyToken,GroupID,ChannelAccessToken):
     else:
         data = {
             "replyToken": ReplyToken,
-            "messages":[{
+            "messages":[CommandBotInGroup(GroupID),
+            {
                 "type":"text",
                 "text":"สามารถเลือกคำสั่งที่ต้องการตามรายการด้านล่าง",
                 "quickReply": QuickReplyGroup(GroupID)

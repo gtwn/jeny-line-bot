@@ -303,7 +303,7 @@ def FlexMyTask(task):
                     "altText": "งานที่ต้องทำ",
                     "contents": {
                         "type": "bubble",
-                        "size": "mega",
+                        "size": "kilo",
                         "direction": "ltr",
                         "hero": {
                             "type": "image",
@@ -470,7 +470,7 @@ def FlexFollowTask(task):
                     "altText": "งานที่สั่ง",
                     "contents": {
                             "type": "bubble",
-                            "size": "mega",
+                            "size": "kilo",
                             "direction": "ltr",
                             "hero": {
                                 "type": "image",
@@ -697,7 +697,7 @@ def FlexTaskToday(task):
             "altText": "งานภายในวันนี้",
             "contents": {
                 "type": "bubble",
-                "size": "mega",
+                "size": "kilo",
                 "direction": "ltr",
                 "hero": {
                     "type": "image",
@@ -837,7 +837,7 @@ def FlexFollowTaskReject(task):
                     "altText": "งานที่สามารถยกเลิก",
                     "contents": {
                             "type": "bubble",
-                            "size": "mega",
+                            "size": "kilo",
                             "direction": "ltr",
                             "hero": {
                                 "type": "image",
@@ -1166,7 +1166,7 @@ def FlexFollow(task):
                     "altText": "ตามงาน",
                     "contents": {
                             "type": "bubble",
-                            "size": "mega",
+                            "size": "kilo",
                             "direction": "ltr",
                             "hero": {
                                 "type": "image",
@@ -1341,7 +1341,7 @@ def FlexReviewTask(task):
                     "altText": "ตรวจงาน",
                     "contents": {
                             "type": "bubble",
-                            "size": "mega",
+                            "size": "kilo",
                             "direction": "ltr",
                             "hero": {
                                 "type": "image",
@@ -1506,7 +1506,7 @@ def FlexTaskList(task):
                     "altText": "ส่งงาน",
                     "contents": {
                             "type": "bubble",
-                            "size": "mega",
+                            "size": "kilo",
                             "direction": "ltr",
                             "hero": {
                                 "type": "image",
@@ -2181,6 +2181,269 @@ def Menu():
 
     return message
 
+
+## say jeny one-one
+def CommandBot():
+    message = {
+        "type": "flex",
+        "altText": "Hello Jeny !",
+        "contents": {
+            "type": "carousel",
+            "contents": [
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgSKP.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover"
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgYPt.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type": "message",
+                        "text": "#งานที่สั่ง"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUg7WI.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type": "message",
+                        "text": "#งานที่ต้องทำ"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgN3l.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type": "message",
+                        "text": "#ตามงาน"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUg3QN.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type": "message",
+                        "text": "#ส่งงาน"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgzee.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type":"postback",
+                        "text":"ตรวจงาน",
+                        "data":"action=check"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgfav.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type": "message",
+                        "text": "#ยกเลิก"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgBbk.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type": "message",
+                        "text": "#ประวัติงาน"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgk4E.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type":"uri",
+                        "uri":"https://kmitl-chatbot.herokuapp.com"
+                    }
+                }
+                }
+            ]
+            }
+    }
+
+    return message
+
+## when say jeny carousel in group
+def CommandBotInGroup(groupID):
+    message = {
+        "type": "flex",
+        "altText": "Hello Jeny !",
+        "contents": {
+            "type": "carousel",
+            "contents": [
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgSKP.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover"
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUg9nV.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type":"postback",
+                        "label":"สั่งงาน",
+                        "text": "สั่งงาน",
+                        "data": "action=assign&groupId={}".format(groupID)
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgYPt.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type" : "message",
+                        "text": "#งานที่สั่ง"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUg7WI.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type" : "message",
+                        "text": "#งานที่ต้องทำ"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgfav.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type" : "message",
+                        "text": "#ยกเลิก"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgBbk.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type" : "message",
+                        "text": "#ประวัติงาน"
+                    }
+                }
+                },
+                {
+                "type": "bubble",
+                "size": "micro",
+                "hero": {
+                    "type": "image",
+                    "url": "https://sv1.picz.in.th/images/2021/02/16/oUgk4E.jpg",
+                    "size": "full",
+                    "aspectRatio": "11:12",
+                    "aspectMode": "cover",
+                    "action": {
+                        "type":"uri",
+                        "uri":"https://kmitl-chatbot.herokuapp.com"
+                    }
+                }
+                }
+            ]
+            }
+    }
+
+    return message
 
 def QuickReply():
 
