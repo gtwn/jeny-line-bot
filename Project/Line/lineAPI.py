@@ -30,65 +30,7 @@ def ReplyQuickMessageSayJeny(ReplyToken,GroupID,ChannelAccessToken):
             "messages":[{
                 "type":"text",
                 "text":"สามารถเลือกคำสั่งที่ต้องการตามรายการด้านล่าง",
-                "quickReply":{
-                    "items":[
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbUsKf.png",
-                            "action": {
-                                "type":"message",
-                                "label":"คำสั่งแนะนำ",
-                                "text":"#คำสั่งแนะนำ"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbEczR.png",
-                            "action": {
-                                "type":"postback",
-                                "label":"สั่งงาน",
-                                "text": "สั่งงาน",
-                                "data": "action=assign&groupId={}".format(GroupID)
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqMGz.png",
-                            "action": {
-                                "type":"message",
-                                "label":"งานที่สั่ง",
-                                "text":"#งานที่สั่ง"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqaB1.png",
-                            "action": {
-                                "type":"message",
-                                "label":"งานที่ต้องทำ",
-                                "text":"#งานที่ต้องทำ"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb50qR.png",
-                            "action": {
-                                "type":"message",
-                                "label":"ยกเลิกงาน",
-                                "text":"#ยกเลิก"
-                            }
-                        },
-                        {
-                            "type":"action",
-                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5pJe.png",
-                            "action": {
-                                "type":"message",
-                                "label":"ประวัติงาน",
-                                "text":"#ประวัติงาน"
-                            }
-                        }
-                    ]
-                }
+                "quickReply": QuickReplyGroup(GroupID)
             }]
         }
     data = json.dumps(data)

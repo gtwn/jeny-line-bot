@@ -163,7 +163,7 @@ def action():
             ReplyCancelTask(replyToken,reply,result,Channel_Access_Token)
     elif action == "assign":        ## แสดง flex สำหรับสั่งงาน
         profile = GetUserProfile(userID, Channel_Access_Token)
-        replyMessage = FlexAssignTask(profile,userID,groupID)
+        replyMessage = FlexAssignTask(profile,groupID)
         ReplyTaskMessage(replyToken, replyMessage, Channel_Access_Token)
     elif action == "information":       ## รายละเอียดงานที่ต้องทำ
         result = FindTaskByID(id)
@@ -204,17 +204,18 @@ def assignTask():
     userList = payload.get('order_to')
     deadline = payload.get('deadline')
     member = payload.get('member')
-    deadline_obj = datetime.strptime(deadline,"%Y-%m-%dT%H:%M:%S.%fZ")
     typeWork = payload.get('type')
     detail = payload.get('detail')
-    deadline_str = "{}/{}/{}".format(str(deadline_obj.day), str(deadline_obj.month), str(deadline_obj.year))
-    if subject == "" and userList == [] and detail == "" and typeWork == "" and deadline == "" :
+    if subject == '' or userList == [] or detail == '' or typeWork == '' or deadline == '' :
         return 'Failed', 304
     else :
+        deadline_obj = datetime.strptime(deadline,"%Y-%m-%dT%H:%M:%S.%fZ")
+        deadline_str = "{}/{}/{}".format(str(deadline_obj.day), str(deadline_obj.month), str(deadline_obj.year))
+
         userProfile = InsertNewTask(userList,member, subject, detail, typeWork, deadline_obj, userOrder, groupId)
         replyMessage = FlexDetailTask(subject, detail, deadline_str, member,userProfile )
         ReplyNewTask(groupId, replyMessage, userList, Channel_Access_Token)
 
-    return 'Success',201
+        return 'Success',201
   
     

@@ -2077,7 +2077,7 @@ def BubbleAcceptRejectTask(task):
 
     return message
 
-def FlexAssignTask(profile,userId,groupId):
+def FlexAssignTask(profile,groupId):
 
     message = {
         "type": "flex",
@@ -2120,7 +2120,7 @@ def FlexAssignTask(profile,userId,groupId):
                     "action": {
                         "type": "uri",
                         "label": "สั่งงาน",
-                        "uri": "https://liff.line.me/1654805076-agyLkygK/?gid={}&uid={}".format(groupId,userId)
+                        "uri": "https://liff.line.me/1654805076-agyLkygK/?gid={}".format(groupId)
                     },
                     "color": "#FF9B00FF",
                     "style": "primary"
@@ -2135,7 +2135,7 @@ def FlexAssignTask(profile,userId,groupId):
 
 ## เมนูแนะนำคำสั่ง BOT
 def Menu():
-    
+   
     message = {
         "type": "flex",
         "altText": "คำแนะนำการใช้งาน",
@@ -2258,12 +2258,94 @@ def QuickReply():
                         "label":"ประวัติงาน",
                         "text":"#ประวัติงาน"
                     }
+                },
+                {
+                    "type":"action",
+                    "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5dB8.png",
+                    "action": {
+                        "type":"message",
+                        "label":"ตรวจสอบงานผ่านเว็บไซต์",
+                        "text":"สามารถตรวจสอบงานเพิ่มเติมได้ที่\nhttps://kmitl-chatbot.herokuapp.com/"
+                    }
                 }
             ]
         }
     
     return message
 
+
+def QuickReplyGroup(groupID):
+    message = {
+                    "items":[
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbUsKf.png",
+                            "action": {
+                                "type":"message",
+                                "label":"คำสั่งแนะนำ",
+                                "text":"#คำสั่งแนะนำ"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbEczR.png",
+                            "action": {
+                                "type":"postback",
+                                "label":"สั่งงาน",
+                                "text": "สั่งงาน",
+                                "data": "action=assign&groupId={}".format(groupID)
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqMGz.png",
+                            "action": {
+                                "type":"message",
+                                "label":"งานที่สั่ง",
+                                "text":"#งานที่สั่ง"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lbqaB1.png",
+                            "action": {
+                                "type":"message",
+                                "label":"งานที่ต้องทำ",
+                                "text":"#งานที่ต้องทำ"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb50qR.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ยกเลิกงาน",
+                                "text":"#ยกเลิก"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5pJe.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ประวัติงาน",
+                                "text":"#ประวัติงาน"
+                            }
+                        },
+                        {
+                            "type":"action",
+                            "imageUrl": "https://sv1.picz.in.th/images/2021/01/18/lb5dB8.png",
+                            "action": {
+                                "type":"message",
+                                "label":"ตรวจสอบงานผ่านเว็บไซต์",
+                                "text":"สามารถตรวจสอบงานเพิ่มเติมได้ที่\nhttps://kmitl-chatbot.herokuapp.com/"
+                            }
+                        }
+                    ]
+                }
+
+
+    return message
 
 def FlexInformation(task):
 
