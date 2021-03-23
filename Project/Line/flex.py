@@ -614,7 +614,11 @@ def FlexFollowTask(task):
                     },
                     {
                         "type": "text",
-                        "text": "www.",
+                        "text": "https://kmitl-chatbot.herokuapp.com",
+                        "action": {
+                            "type": "uri",
+                            "uri": "https://kmitl-chatbot.herokuapp.com"
+                        },
                         "contents": []
                     }
                     ]
@@ -654,6 +658,7 @@ def FlexRejectTask(task,user):
                                             "size": "xl",
                                             "color": "#FFB75E",
                                             "flex": 0,
+                                            "wrap": False,
                                             "align": "start",
                                             "margin": "md",
                                             "contents": []
@@ -981,7 +986,11 @@ def FlexFollowTaskReject(task):
                     },
                     {
                         "type": "text",
-                        "text": "www.",
+                        "text": "https://kmitl-chatbot.herokuapp.com",
+                        "action": {
+                            "type": "uri",
+                            "uri": "https://kmitl-chatbot.herokuapp.com"
+                        },
                         "contents": []
                     }
                     ]
@@ -1675,6 +1684,7 @@ def FlexTaskList(task):
 # response ตามงาน
 def BubbleFollow(task):
     deadline = datetime.strftime(task["deadline"],"%d %b, %Y")
+    info = (task["task"][:50] + '..') if len(task["task"]) > 75 else task["task"]
 
     message = {
         "type": "flex",
@@ -1707,7 +1717,7 @@ def BubbleFollow(task):
                         "weight": "bold",
                         "size": "xl",
                         "flex": 0,
-                        "wrap": True,
+                        "wrap": False,
                         "contents": []
                     }
                     ]
@@ -1734,7 +1744,7 @@ def BubbleFollow(task):
                     "action": {
                         "type": "postback",
                         "label": "Send Work",
-                        "text": "ยืนยันการส่งงาน\n{}\nเรียบร้อย".format(task["task"]),
+                        "text": "ยืนยันการส่งงาน\n{}\nเรียบร้อย".format(info),
                         "data": "action=send&id={}".format(str(task["_id"]))
                     },
                     "color": "#FF9B00FF",
@@ -1751,6 +1761,7 @@ def BubbleFollow(task):
 def BubbleInfoTask(task):
 
     deadline = datetime.strftime(task["deadline"],"%d %b, %Y")
+    info = (task["task"][:50] + '..') if len(task["task"]) > 75 else task["task"]
 
     message = {
         "type": "flex",
@@ -1783,7 +1794,7 @@ def BubbleInfoTask(task):
                         "weight": "bold",
                         "size": "xl",
                         "flex": 0,
-                        "wrap": True,
+                        "wrap": False,
                         "contents": []
                     }
                     ]
@@ -1820,7 +1831,7 @@ def BubbleInfoTask(task):
                     "action": {
                         "type": "postback",
                         "label": "Send Work",
-                        "text": "ยืนยันการส่งงาน\n{}\เรียบร้อยแล้ว".format(task["task"]),
+                        "text": "ยืนยันการส่งงาน\n{}\nเรียบร้อยแล้ว".format(info),
                         "data": "action=send&id={}".format(str(task["_id"]))
                     },
                     "color": "#FF9B00FF",
@@ -1837,7 +1848,7 @@ def BubbleInfoTask(task):
 # ข้อมุลก่อนยกเลิกงาน
 def BubbleInfoBeforeCancel(task):
     deadline = datetime.strftime(task["deadline"],"%d %b, %Y")
-
+    info = (task["task"][:50] + '..') if len(task["task"]) > 75 else task["task"]
     message = {
         "type": "flex",
         "altText": "ข้อมูลก่อนส่งงาน",
@@ -1869,7 +1880,7 @@ def BubbleInfoBeforeCancel(task):
                         "weight": "bold",
                         "size": "xl",
                         "flex": 0,
-                        "wrap": True,
+                        "wrap": False,
                         "contents": []
                     }
                     ]
@@ -1906,7 +1917,7 @@ def BubbleInfoBeforeCancel(task):
                     "action": {
                         "type": "postback",
                         "label": "Delete Work",
-                        "text": "ยืนยันการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(task["task"],"@"+" @".join(task["member"])),
+                        "text": "ยืนยันการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(info,"@"+" @".join(task["member"])),
                         "data": "action=remove&id={}".format(str(task["_id"]))
                     },
                     "color": "#F04E4EFF",
@@ -1924,6 +1935,7 @@ def BubbleInfoBeforeCancel(task):
 
 ## แสดง Accept Reject ตรวจงาน
 def BubbleReviewTask(task):
+    info = (task["task"][:50] + '..') if len(task["task"]) > 75 else task["task"]
 
     message = {
         "type": "flex",
@@ -1942,7 +1954,7 @@ def BubbleReviewTask(task):
                     "type": "text",
                     "text": "ตรวจงาน : {}".format(task["task"]),
                     "color": "#FFFFFFFF",
-                    "wrap": True,
+                    "wrap": False,
                     "contents": []
                 },
                 {
@@ -1973,7 +1985,7 @@ def BubbleReviewTask(task):
                         "action": {
                             "type": "postback",
                             "label": "Reject",
-                            "text": "ตรวจสอบการส่งงาน {}".format(task["task"]),
+                            "text": "ตรวจสอบการส่งงาน {}".format(info),
                             'data': "action=reject&id={}".format(task["_id"])
                         },
                         "color": "#C93131FF",
@@ -1985,7 +1997,7 @@ def BubbleReviewTask(task):
                         "action": {
                             "type": "postback",
                             "label": "Accept",
-                            "text": "ตรวจสอบการส่งงาน {}".format(task["task"]),
+                            "text": "ตรวจสอบการส่งงาน {}".format(info),
                             'data': "action=accept&id={}".format(task["_id"])
                         },
                         "height": "md",
@@ -2001,10 +2013,10 @@ def BubbleReviewTask(task):
     return message
 
 def BubbleAcceptRejectTask(task):
-
+    info = (task["task"][:50] + '..') if len(task["task"]) > 75 else task["task"]
     message = {
         "type": "flex",
-        "altText": "ตรวจงาน"+task["task"],
+        "altText": "ตรวจงาน"+ info,
         "contents": {
             "type": "bubble",
             "size": "kilo",
@@ -2019,7 +2031,7 @@ def BubbleAcceptRejectTask(task):
                     "type": "text",
                     "text": "ตรวจงาน : {}".format(task["task"]),
                     "color": "#FFFFFFFF",
-                    "wrap": True,
+                    "wrap": False,
                     "contents": []
                 },
                 {
@@ -2050,7 +2062,7 @@ def BubbleAcceptRejectTask(task):
                         "action": {
                             "type": "postback",
                             "label": "Reject",
-                            "text": "ตรวจสอบการส่งงาน {}".format(task["task"]),
+                            "text": "ตรวจสอบการส่งงาน {}".format(info),
                             'data': "action=reject&id={}".format(task["_id"])
                         },
                         "color": "#C93131FF",
@@ -2633,6 +2645,7 @@ def FlexInformation(task):
                 "text": task["task"],
                 "size": "lg",
                 "color": "#FFFFFFFF",
+                "wrap": False,
                 "contents": []
             }
             ]

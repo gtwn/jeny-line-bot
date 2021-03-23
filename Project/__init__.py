@@ -5,6 +5,7 @@ from Project.Line.flex import *
 import requests
 import json
 from datetime import datetime
+from datetime import timedelta 
 from Project.Config import *
 
 from Project.Config import *
@@ -209,7 +210,7 @@ def assignTask():
     if subject == '' or userList == [] or detail == '' or typeWork == '' or deadline == '' :
         return 'Failed', 304
     else :
-        deadline_obj = datetime.strptime(deadline,"%Y-%m-%dT%H:%M:%S.%fZ")
+        deadline_obj = datetime.strptime(deadline,"%Y-%m-%dT%H:%M:%S.%fZ") + timedelta(days=1)
         deadline_str = "{}/{}/{}".format(str(deadline_obj.day), str(deadline_obj.month), str(deadline_obj.year))
 
         userProfile = InsertNewTask(userList,member, subject, detail, typeWork, deadline_obj, userOrder, groupId)

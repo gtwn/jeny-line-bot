@@ -237,6 +237,7 @@ def FindFollowTaskInGroup(userID,groupID):
             {
                 "type": "text",
                 "text": result["task"],
+                "wrap": False,
                 "contents": []
             },
             {
@@ -299,7 +300,7 @@ def RejectFollowTask(userID):
             "layout": "baseline",
             "action": {
                 "type": "postback",
-                "label": "ยกเลิกงาน"+result["task"],
+                "label": "ยกเลิกงาน",
                 "text":"ตรวจสอบการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(result["task"],"@"+" @".join(result["member"])),
                 "data": "action=removeInfo&id={}".format(str(result["_id"]))
             },
@@ -307,6 +308,7 @@ def RejectFollowTask(userID):
             {
                 "type": "text",
                 "text": result["task"],
+                "wrap": False,
                 "contents": []
             },
             {
@@ -367,7 +369,7 @@ def RejectFollowTaskInGroup(userID,groupID):
             "layout": "baseline",
             "action": {
                 "type": "postback",
-                "label": "ยกเลิกงาน"+result["task"],
+                "label": "ยกเลิกงาน",
                 "text":"ตรวจสอบการยกเลิกงาน\n{}\nผู้รับผิดชอบ: {}".format(result["task"],"@"+" @".join(result["member"])),
                 "data": "action=removeInfo&id={}".format(str(result["_id"]))
             },
@@ -375,6 +377,7 @@ def RejectFollowTaskInGroup(userID,groupID):
             {
                 "type": "text",
                 "text": result["task"],
+                "wrap": False,
                 "contents": []
             },
             {
@@ -439,7 +442,7 @@ def FindHistory(userID,groupID):
                                 "size": "md",
                                 "color": "#FFFFFFFF",
                                 "align": "start",
-                                "wrap": true,
+                                "wrap": False,
                                 "contents": []
                             },
                             {
@@ -501,7 +504,10 @@ def FollowTask(userID):
 
         else:
             status = 'ยังไม่เลยกำหนด'
-            color = "#000000FF"
+            color = "#FFFFFFFF"
+        
+        info = (result["task"][:50] + '..') if len(result["task"]) > 75 else result["task"]
+
         messageBack = {
                             "type": "box",
                             "layout": "baseline",
@@ -515,11 +521,11 @@ def FollowTask(userID):
                                 "size": "md",
                                 "color": "#FFFFFFFF",
                                 "align": "start",
-                                "wrap": true,
+                                "wrap": False,
                                 "action": {
                                     "type": "postback",
-                                    "label": "ตามงาน"+result["task"],
-                                    "text": "ติดตามงาน\n{}".format(result["task"]),
+                                    "label": "ตามงาน",
+                                    "text": "ติดตามงาน\n{}".format(info),
                                     "data": "action=follow&id={}".format(str(result["_id"]))
                                 },
                                 "contents": []
@@ -610,7 +616,9 @@ def FindReviewTask(userID):
 
         else:
             status = 'ยังไม่เลยกำหนด'
-            color = "#000000FF"
+            color = "#FFFFFFFF"
+
+        info = (result["task"][:50] + '..') if len(result["task"]) > 75 else result["task"]
         messageBack = {
                             "type": "box",
                             "layout": "baseline",
@@ -624,10 +632,10 @@ def FindReviewTask(userID):
                                 "size": "md",
                                 "color": "#FFFFFFFF",
                                 "align": "start",
-                                "wrap": true,
+                                "wrap": False,
                                 "action": {
                                     "type": "postback",
-                                    "text": "ตรวจงาน\n{}".format(result["task"]),
+                                    "text": "ตรวจงาน\n{}".format(info),
                                     "data": "action=ifcheck&id={}".format(str(result["_id"]))
                                 },
                                 "contents": []
@@ -719,7 +727,7 @@ def ListTaskForSend(userID):
 
         else:
             status = 'ยังไม่เลยกำหนด'
-            color = "#000000FF"
+            color = "#FFFFFFFF"
 
         messageBack = {
                             "type": "box",
@@ -734,7 +742,7 @@ def ListTaskForSend(userID):
                                 "size": "md",
                                 "color": "#FFFFFFFF",
                                 "align": "start",
-                                "wrap": true,
+                                "wrap": False,
                                 "action": {
                                     "type": "postback",
                                     "text": "ตรวจสอบข้อมูลการส่งงาน\n{}".format(result["task"]),
