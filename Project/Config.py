@@ -1,3 +1,6 @@
 Channel_Secret = "7b1c2a4b9079a9f14243347bcbd5042e"
 Channel_Access_Token = "cWm4oA7FXLD7Syn5PbEozlZYxo7SEanV0QIXvm7HNna0MX04FiCkyq2FcQyv4Ahe6P4aTgTbIo0aBXQvMER2XE6Lh7R3QYEDoJU7dmFS9hEeLKdhqhrzg3Rb/f+mLuw8K/i4rEFmO98n3cyhnlnAUQdB04t89/1O/w1cDnyilFU="
 Basic_ID = "@774rbgcy"
+DB_Username = "gtwn"
+DB_Password = "msD4ICAbdGUlg7Qu"
+DB_Name = "jenytestdb"
